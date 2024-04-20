@@ -11,15 +11,12 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.hms.SessionManager;
-import com.example.hms.Singleton.HostelCallback;
 import com.example.hms.Singleton.VolleySingleton;
 import com.example.hms.utils.Booking;
 import com.example.hms.utils.Hostel;
+import com.example.hms.utils.Notification;
 import com.example.hms.utils.Room;
 import com.example.hms.utils.Student;
 import com.example.hms.utils.User;
@@ -85,7 +82,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 " UNION ALL SELECT * FROM " + Hostel.TABLE_NAME +
                 " UNION ALL SELECT * FROM " + Room.TABLE_NAME +
                 " UNION ALL SELECT * FROM " + Student.TABLE_NAME +
-                " UNION ALL SELECT * FROM " + Booking.TABLE_NAME;
+                " UNION ALL SELECT * FROM " + Booking.TABLE_NAME+
+                " UNION ALL SELECT * FROM " + Notification.TABLE_NAME;
 
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -146,6 +144,54 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // Add the request to the RequestQueue
         requestQueue.add(request);
     }
+    //Add notifications
+    public long addNotification(int hostelId, int senderId, int receiverId, String message) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Notification.KEY_HOSTEL_ID, hostelId);
+        values.put(Notification.KEY_SENDER_ID, senderId);
+        values.put(Notification.KEY_RECEIVER_ID, receiverId);
+        values.put(Notification.KEY_MESSAGE, message);
+
+        long id = db.insert(Notification.TABLE_NAME, null, values);
+
+        db.close();
+
+        return id;
+    }
+
+    //Get notification
+    @SuppressLint("Range")
+    public Notification getNotification(long id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(Notification.TABLE_NAME,
+                new String[]{Notification.KEY_ID, Notification.KEY_HOSTEL_ID, Notification.KEY_SENDER_ID, Notification.KEY_RECEIVER_ID, Notification.KEY_MESSAGE},
+                Notification.KEY_ID + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        Notification notification = null;
+        if (cursor != null) {
+            notification = new Notification(
+                    cursor.getInt(cursor.getColumnIndex(Notification.KEY_ID)),
+                    cursor.getInt(cursor.getColumnIndex(Notification.KEY_HOSTEL_ID)),
+                    cursor.getInt(cursor.getColumnIndex(Notification.KEY_SENDER_ID)),
+                    cursor.getInt(cursor.getColumnIndex(Notification.KEY_RECEIVER_ID)),
+                    cursor.getString(cursor.getColumnIndex(Notification.KEY_MESSAGE)),
+                    cursor.getString(cursor.getColumnIndex(Notification.KEY_SENT_AT)));
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return notification;
+    }
+
     public long addStudent( String student_name,String student_email , String registration_no, String guardian, String phone) {
         // get writable database as we want to write data
         SQLiteDatabase db = this.getWritableDatabase();
@@ -167,6 +213,63 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 
         return id;
+    }
+    //Get all students
+
+    @SuppressLint("Range")
+    public List<Student> getAllStudents() {
+        List<Student> students = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + Student.TABLE_NAME;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Student student = new Student();
+                student.setId(cursor.getInt(cursor.getColumnIndex(Student.KEY_ID)));
+                student.setStudent_name(cursor.getString(cursor.getColumnIndex(Student.KEY_NAME)));
+                student.setEmail(cursor.getString(cursor.getColumnIndex(Student.KEY_EMAIL)));
+                student.setRegistration_no(cursor.getString(cursor.getColumnIndex(Student.KEY_REGISTRATION)));
+                student.setGuardian(cursor.getString(cursor.getColumnIndex(Student.KEY_GUARDIAN)));
+                student.setPhone(cursor.getString(cursor.getColumnIndex(Student.KEY_PHONE)));
+
+                students.add(student);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return students;
+    }
+
+// Get a student
+
+    @SuppressLint("Range")
+    public Student getStudentById(int studentId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + Student.TABLE_NAME + " WHERE " +
+                Student.KEY_ID + " = ?";
+
+        Cursor cursor = db.rawQuery(selectQuery, new String[]{String.valueOf(studentId)});
+
+        Student student = null;
+        if (cursor.moveToFirst()) {
+            student = new Student();
+            student.setId(cursor.getInt(cursor.getColumnIndex(Student.KEY_ID)));
+            student.setStudent_name(cursor.getString(cursor.getColumnIndex(Student.KEY_NAME)));
+            student.setEmail(cursor.getString(cursor.getColumnIndex(Student.KEY_EMAIL)));
+            student.setRegistration_no(cursor.getString(cursor.getColumnIndex(Student.KEY_REGISTRATION)));
+            student.setGuardian(cursor.getString(cursor.getColumnIndex(Student.KEY_GUARDIAN)));
+            student.setPhone(cursor.getString(cursor.getColumnIndex(Student.KEY_PHONE)));
+        }
+
+        cursor.close();
+        db.close();
+
+        return student;
     }
 
 
@@ -225,55 +328,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return id;
     }
 
-//    private void uploadHostelToServer(String hostel_name, String description, String address, String city, String country, String email, String full_name, boolean is_admin) {
-//        String url = "https://pmenergies.co.ke/android/add_hostel.php";
-//
-//        // Create a JSONObject to hold the parameters
-//        JSONObject params = new JSONObject();
-//        try {
-//            params.put("hostel_name", hostel_name);
-//            params.put("description", description);
-//            params.put("address", address);
-//            params.put("city", city);
-//            params.put("country", country);
-//            params.put("email", email);
-//            params.put("full_name", full_name);
-//            params.put("is_admin", is_admin ? 1 : 0); // Convert boolean to int (1 for true, 0 for false)
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//
-//        // Create a new JsonObjectRequest using POST method
-//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, params,
-//                response -> {
-//                    // Handle the server response here
-//                    try {
-//                        String message = response.getString("message");
-//                        int status = response.getInt("status");
-//                        if (status == 0) {
-//                            // Hostel uploaded successfully
-//                            Log.d("UploadHostel", message);
-//                        } else {
-//                            // Error uploading hostel
-//                            Log.e("UploadHostel", message);
-//                        }
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                },
-//                error -> {
-//                    // Handle Volley errors here
-//                    Log.e("UploadHostel", "Volley Error: " + error.toString());
-//                });
-//        // Add the request to the RequestQueue
-//
-//        // **Fix: Get the VolleySingleton instance and use it to access the request queue**
-//        VolleySingleton.getInstance(context.getApplicationContext()).addToRequestQueue(request);
-//
-//    }
-
-
-    public long addBooking( String check_in, String check_out, String number_of_students , String price) {
+    public long addBooking( String check_in, String check_out,  String price) {
         // get writable database as we want to write data
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -282,7 +337,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // no need to add them
         values.put(Booking.KEY_CHECK_IN_DATE, check_in);
         values.put(Booking.KEY_CHECK_OUT_DATE, check_out);
-        values.put(Booking.KEY_NUMBER_OF_STUDENTS, number_of_students);
+        //values.put(Booking.KEY_NUMBER_OF_STUDENTS, number_of_students);
         values.put(Booking.KEY_TOTAL_PRICE, price);
 
         // insert row
@@ -387,7 +442,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     cursor.getString(cursor.getColumnIndex(Room.KEY_ROOM_TYPE)),
                     cursor.getString(cursor.getColumnIndex(Room.KEY_CAPACITY)),
                     cursor.getInt(cursor.getColumnIndex(Room.KEY_PRICE)),
-                    cursor.getString(cursor.getColumnIndex(Room.KEY_DESCRIPTION))
+                    cursor.getString(cursor.getColumnIndex(Room.KEY_DESCRIPTION)),
+                    cursor.getString(cursor.getColumnIndex(Room.KEY_STATUS)),
+                    cursor.getDouble(cursor.getColumnIndex(Room.KEY_PRICE_PER_NIGHT)),
+                    cursor.getString(cursor.getColumnIndex(Room.KEY_BOOKING_DATE))
             );
 
             cursor.close();
@@ -412,14 +470,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         // Update row in RoomAllocation table based on room_id
         return db.update(Room.TABLE_NAME, values, Room.KEY_ID + " = ?",
-                new String[]{String.valueOf(room.getRoom_id())});
+                new String[]{String.valueOf(room.getId())});
     }
 
 // Delete A room
 public void deleteRoom(Room room) {
     SQLiteDatabase db = this.getWritableDatabase();
     db.delete(Room.TABLE_NAME, Room.KEY_ID + " = ?",
-            new String[]{String.valueOf(room.getRoom_id())});
+            new String[]{String.valueOf(room.getId())});
     db.close();
 }
 
@@ -460,53 +518,33 @@ public void deleteRoom(Room room) {
         return hostels;
     }
 
-//    @SuppressLint("Range")
-//    public List<Hostel> getAllHostels(final HostelCallback callback) {
-//        String url = "https://pmenergies.co.ke/android/fetch_hostels.php"; // Replace this with your server endpoint URL
-//
-//        RequestQueue queue = VolleySingleton.getRequestQueue();
-//
-//        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-//                new Response.Listener<JSONArray>() {
-//                    @Override
-//                    public void onResponse(JSONArray response) {
-//
-//                        List<Hostel> hostels = new ArrayList<>();
-//
-//                        try {
-//                            for (int i = 0; i < response.length(); i++) {
-//                                JSONObject jsonObject = response.getJSONObject(i);
-//
-//                                Hostel hostel = new Hostel();
-//                                hostel.setId(jsonObject.getInt("hostel_id"));
-//                                //hostel.setId(jsonObject.getInt("student_id"));
-//                                hostel.setHostelName(jsonObject.getString("hostel_name"));
-//                                hostel.setDescription(jsonObject.getString("description"));
-//                                hostel.setAddress(jsonObject.getString("address"));
-//                                hostel.setCity(jsonObject.getString("city"));
-//                                hostel.setCountry(jsonObject.getString("country"));
-//
-//                                hostels.add(hostel);
-//                            }
-//
-//                            callback.onSuccess(hostels); // Pass the hostels list to the callback
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Log.e("Volley Error", error.toString());
-//                    }
-//                });
-//
-//        queue.add(jsonArrayRequest);
-//    return hostels;
-//    }
+    @SuppressLint("Range")
+    public Hostel getHostelById(int hostelId) {
+        SQLiteDatabase db = this.getReadableDatabase();
 
+        String selectQuery = "SELECT * FROM " + Hostel.TABLE_NAME + " WHERE " +
+                Hostel.KEY_ID + " = ?";
 
+        Cursor cursor = db.rawQuery(selectQuery, new String[]{String.valueOf(hostelId)});
+
+        Hostel hostel = null;
+        if (cursor.moveToFirst()) {
+            hostel = new Hostel();
+            hostel.setId(cursor.getInt(cursor.getColumnIndex(Hostel.KEY_ID)));
+            hostel.setStudentId(cursor.getInt(cursor.getColumnIndex(Hostel.KEY_STUDENT_ID)));
+            hostel.setHostelName(cursor.getString(cursor.getColumnIndex(Hostel.KEY_NAME)));
+            hostel.setDescription(cursor.getString(cursor.getColumnIndex(Hostel.KEY_DESCRIPTION)));
+            hostel.setAddress(cursor.getString(cursor.getColumnIndex(Hostel.KEY_ADDRESS)));
+            hostel.setCity(cursor.getString(cursor.getColumnIndex(Hostel.KEY_CITY)));
+            hostel.setCountry(cursor.getString(cursor.getColumnIndex(Hostel.KEY_COUNTRY)));
+            hostel.setCapacity(cursor.getInt(cursor.getColumnIndex(Hostel.KEY_CAPACITY)));
+        }
+
+        cursor.close();
+        db.close();
+
+        return hostel;
+    }
 // List ALl Rooms
 
     public List<Room> getAllRooms() {
@@ -528,7 +566,10 @@ public void deleteRoom(Room room) {
                         cursor.getString(cursor.getColumnIndex(Room.KEY_ROOM_TYPE)),
                         cursor.getString(cursor.getColumnIndex(Room.KEY_CAPACITY)),
                         cursor.getInt(cursor.getColumnIndex(Room.KEY_PRICE)),
-                        cursor.getString(cursor.getColumnIndex(Room.KEY_DESCRIPTION))
+                        cursor.getString(cursor.getColumnIndex(Room.KEY_DESCRIPTION)),
+                        cursor.getString(cursor.getColumnIndex(Room.KEY_STATUS)),
+                        cursor.getDouble(cursor.getColumnIndex(Room.KEY_PRICE_PER_NIGHT)),
+                        cursor.getString(cursor.getColumnIndex(Room.KEY_BOOKING_DATE))
                 );
                 rooms.add(room);
             } while (cursor.moveToNext());
@@ -599,7 +640,10 @@ public void deleteRoom(Room room) {
                 cursor.getString(cursor.getColumnIndex(Room.KEY_ROOM_TYPE)),
                 cursor.getString(cursor.getColumnIndex(Room.KEY_CAPACITY)),
                 cursor.getInt(cursor.getColumnIndex(Room.KEY_PRICE)),
-                cursor.getString(cursor.getColumnIndex(Room.KEY_DESCRIPTION))
+                cursor.getString(cursor.getColumnIndex(Room.KEY_DESCRIPTION)),
+                cursor.getString(cursor.getColumnIndex(Room.KEY_STATUS)),
+                cursor.getDouble(cursor.getColumnIndex(Room.KEY_PRICE_PER_NIGHT)),
+                cursor.getString(cursor.getColumnIndex(Room.KEY_BOOKING_DATE))
             );
 
         // close the db connection

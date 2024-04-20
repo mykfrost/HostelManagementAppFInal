@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".views.BookRoomActivity">
+    <!-- Add your layout components here -->
+    <TextView
+
+        android:id="@+id/textViewRoomId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Room ID:"
+        android:textSize="18sp" />
+
+    <TextView
+        android:padding="10sp"
+        android:id="@+id/editTextRoomId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint=" Room ID" />
+
+    <TextView
+
+        android:id="@+id/textViewHostelId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hostel Name:"
+        android:textSize="18sp" />
+
+    <TextView
+        android:padding="10sp"
+        android:id="@+id/editTextHostelId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Hostel" />
+
+    <TextView
+
+        android:id="@+id/textViewStudentId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Student Name:"
+        android:textSize="18sp" />
+
+    <TextView
+        android:padding="10sp"
+        android:id="@+id/editTextStudentId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Student ID" />
+
+    <TextView
+        android:id="@+id/textViewCheckInDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Check-in Date:"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/editTextCheckInDate"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Enter Check-in Date" />
+
+    <TextView
+        android:id="@+id/textViewCheckOutDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Check-out Date:"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/editTextCheckOutDate"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Enter Check-out Date" />
+
+    <TextView
+        android:id="@+id/textViewTotalPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Price:"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/editTextTotalPrice"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Enter Total Price" />
+
+    <Button
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/buttonBook"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Book Room" />
+</LinearLayout>

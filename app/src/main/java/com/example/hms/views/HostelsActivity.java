@@ -4,16 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.example.hms.R;
 import com.example.hms.SessionManager;
-import com.example.hms.Singleton.HostelCallback;
 import com.example.hms.database.DatabaseHandler;
 import com.example.hms.utils.Hostel;
 import com.example.hms.utils.HostelAdapter;

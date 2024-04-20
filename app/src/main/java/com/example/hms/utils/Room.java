@@ -11,54 +11,68 @@ public class Room {
         this.databaseHandler = databaseHandler;
     }
     // Hostels table column names
-    public static final String TABLE_NAME = "roomAllocation";
-    public static final String KEY_ID = "room_id";
+    // Room table column names
+    public static final String TABLE_NAME = "room";
+    public static final String KEY_ID = "id";
+    public static final String KEY_HOSTEL_ID = "hostel_id";
     public static final String KEY_STUDENT_ID = "student_id";
-    public static  final String KEY_HOSTEL_ID = "hostel_id";
     public static final String KEY_ROOM_TYPE = "room_type";
     public static final String KEY_CAPACITY = "capacity";
     public static final String KEY_PRICE = "price";
     public static final String KEY_DESCRIPTION = "description";
+    public static final String KEY_STATUS = "status";
+    public static final String KEY_PRICE_PER_NIGHT = "price_per_night";
+    public static final String KEY_BOOKING_DATE = "booking_date";
 
-    public Room(int room_id,int hostel_id,int student_id, String room_type, String capacity, int price, String description) {
-        this.room_id = room_id;
+
+
+    public Room(int id, int hostel_id, int student_id, String room_type, String capacity, int price, String description, String status, double price_per_night, String booking_date) {
+        this.id = id;
         this.hostel_id = hostel_id;
         this.student_id = student_id;
         this.room_type = room_type;
         this.capacity = capacity;
         this.price = price;
         this.description = description;
+        this.status = status;
+        this.price_per_night = price_per_night;
+        this.booking_date = booking_date;
     }
-
-
 
     public Room() {
     }
 
-public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME+
+    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
             "(" +
-             KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            KEY_HOSTEL_ID + " INTEGER," +
             KEY_STUDENT_ID + " INTEGER," +
-             KEY_HOSTEL_ID + " INTEGER," +
-             KEY_ROOM_TYPE + " TEXT," +
-             KEY_CAPACITY + " TEXT," +  // Can be changed to integer if capacity is a number
-             KEY_PRICE + " TEXT," +
-             KEY_DESCRIPTION + " TEXT," +
-            "  FOREIGN KEY(" + KEY_STUDENT_ID + ") REFERENCES Students(KEY_ID)," +  // References Students table
-            "  FOREIGN KEY(" + KEY_HOSTEL_ID + ") REFERENCES Hostels(KEY_ID)" +   // References Hostels table
+            KEY_ROOM_TYPE + " TEXT," +
+            KEY_CAPACITY + " TEXT," +
+            KEY_PRICE + " INTEGER," +
+            KEY_DESCRIPTION + " TEXT," +
+            KEY_STATUS + " TEXT DEFAULT 'available'," +
+            KEY_PRICE_PER_NIGHT + " DECIMAL(10,2) NOT NULL," +
+            KEY_BOOKING_DATE + " DATE" +
             ")";
 
+    public int id;
+    public int hostel_id;
+    public int student_id;
+    public String room_type;
+    public String capacity;
+    public int price;
+    public String description;
+    public String status;
+    public double price_per_night;
+    public String booking_date;
 
-
-
-    public int getRoom_id() {
-        return room_id;
+    public int getId() {
+        return id;
     }
-    public int getNumberOfRoomsInHostel(int hostel_id) {
-        return databaseHandler.getHostelRoomsCount(hostel_id);
-    }
-    public void setRoom_id(int room_id) {
-        this.room_id = room_id;
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getHostel_id() {
@@ -109,13 +123,33 @@ public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME+
         this.description = description;
     }
 
-    public int room_id;
-    public int hostel_id;
-    public int  student_id;
-    public String room_type;
-    public String capacity;
-    public int price;
-    public String description;
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public double getPrice_per_night() {
+        return price_per_night;
+    }
+
+    public void setPrice_per_night(double price_per_night) {
+        this.price_per_night = price_per_night;
+    }
+
+    public String getBooking_date() {
+        return booking_date;
+    }
+
+    public void setBooking_date(String booking_date) {
+        this.booking_date = booking_date;
+    }
+
+    public int getNumberOfRoomsInHostel(int hostel_id) {
+        return databaseHandler.getHostelRoomsCount(hostel_id);
+    }
 
 
 }

@@ -1,8 +1,8 @@
 package com.example.hms.utils;
 
 public class User {
-    public static final String TABLE_NAME = "users";
-    public static final String KEY_ID = "id";
+    public static final String TABLE_NAME = "user";
+    public static final String KEY_ID = "user_id";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_FULL_NAME = "full_name";
     public static final String KEY_PASSWORD = "password";
@@ -15,11 +15,11 @@ public class User {
     }
 
     public int getId() {
-        return id;
+        return user_id;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.user_id = id;
     }
 
     public String getEmail() {
@@ -53,7 +53,7 @@ public class User {
         this.role = role;
     }
 
-    private int id;
+    private int user_id;
 
     private String email;
     private String password;
@@ -63,8 +63,8 @@ public class User {
 
 
 
-    public User(int id, String email, String password, String full_name , String role) {
-        this.id = id;
+    public User(int user_id, String email, String password, String full_name , String role) {
+        this.user_id = user_id;
         this.email = email;
         this.password = password;
         this.full_name = full_name;

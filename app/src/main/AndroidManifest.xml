@@ -15,10 +15,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HMS"
         tools:targetApi="31">
+        <activity
+            android:name=".views.BookRoomActivity"
+            android:exported="false" />
+
         <service
             android:name=".DatabaseUploadWorker"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <activity
             android:name=".views.AddRoomActivity"
             android:exported="false" />

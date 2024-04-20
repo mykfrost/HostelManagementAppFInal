@@ -7,9 +7,9 @@ import android.content.SharedPreferences;
 import com.example.hms.utils.User;
 
 public class SessionManager {
-    private static final String PREF_NAME = "UserSession";
+    private static final String PREF_NAME = "Session";
     private static final String KEY_EMAIL = "email";
-    private static final String KEY_ROLE = "user_role"; // Added user role key
+    private static final String KEY_ROLE = "role"; // Added user role key
     private static final String KEY_FULL_NAME = "full_name";
     private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
     private static final String ROLE_ADMIN = "admin"; // Added role constants

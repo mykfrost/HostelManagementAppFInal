@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -26,6 +27,7 @@ public class RegisterActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     SessionManager sessionManager;
     EditText fullNameEditText, emailEditText, passwordEditText;
+    TextView login ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,10 +35,14 @@ public class RegisterActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.editTextEmail);
         fullNameEditText = findViewById(R.id.editTextName);
         passwordEditText = findViewById(R.id.editTextPassword);
+        login = findViewById(R.id.login);
         requestQueue = Volley.newRequestQueue(this);
         sessionManager = new SessionManager(getApplicationContext());
     }
-
+public void onLoginClick(View v){
+        Intent login = new Intent(this , LoginActivity.class);
+        startActivity(login);
+}
     public void register(View view) {
         String email = emailEditText.getText().toString().trim();
         String password =    passwordEditText.getText().toString().trim();
@@ -68,14 +74,6 @@ public class RegisterActivity extends AppCompatActivity {
                             if (status == 0) {
                                 // Registration successful, handle accordingly
                                 // For example, redirect to login page
-                                // Registration successful, create login session
-
-                                String fullName = response.getString("full_name");
-                                String eMail = response.getString("email");
-                                String userRole = response.getString("user_role");
-
-                                User user = new User(eMail, fullName, userRole);
-                                sessionManager.createLoginSession(user);
                                 Intent Login  = new Intent(getApplicationContext(), LoginActivity.class);
                                 startActivity(Login);
                             } else if (status == 1) {
@@ -85,7 +83,6 @@ public class RegisterActivity extends AppCompatActivity {
                                 startActivity(Main);
                             } else {
                                 // Missing mandatory parameters, show appropriate message
-                                Log.d(TAG, "Server Response: " + response.toString());
                                 Toast.makeText(RegisterActivity.this, "Error Missing Mandatory Parameters", Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {

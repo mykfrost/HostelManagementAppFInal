@@ -2,7 +2,7 @@ package com.example.hms.utils;
 
 public class Hostel {
     // Hostels table column names
-    public static final String TABLE_NAME = "hostels";
+    public static final String TABLE_NAME = "hostel";
     public static final String KEY_ID = "id";
     public static final String KEY_STUDENT_ID = "student_id";
     public static final String KEY_NAME = "hostel_name";
@@ -28,19 +28,32 @@ public class Hostel {
     private int capacity; // Capacity field
 
     // SQL statement to create the hostels table
+//    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
+//            "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+//            KEY_STUDENT_ID + " INTEGER," +
+//            KEY_NAME + " TEXT," +
+//            KEY_DESCRIPTION + " TEXT," +
+//            KEY_ADDRESS + " TEXT," +
+//            KEY_CITY + " TEXT," +
+//            KEY_COUNTRY + " TEXT," +
+//            KEY_EMAIL + " TEXT," +
+//            KEY_FULL_NAME + " TEXT," +
+//            KEY_IS_ADMIN + " INTEGER," +
+//            KEY_CAPACITY + " INTEGER," + // Added capacity field to the table schema
+//            "FOREIGN KEY(" + KEY_STUDENT_ID + ") REFERENCES " + Student.TABLE_NAME + "(" + KEY_ID + "))";
     public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
-            "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-            KEY_STUDENT_ID + " INTEGER," +
-            KEY_NAME + " TEXT," +
+            "(" + KEY_ID + " INT UNSIGNED PRIMARY KEY AUTOINCREMENT," + // Match data type and constraints
+            KEY_STUDENT_ID + " INT UNSIGNED," + // Match data type and constraints
+            KEY_NAME + " TEXT NOT NULL," +
             KEY_DESCRIPTION + " TEXT," +
             KEY_ADDRESS + " TEXT," +
             KEY_CITY + " TEXT," +
             KEY_COUNTRY + " TEXT," +
             KEY_EMAIL + " TEXT," +
             KEY_FULL_NAME + " TEXT," +
-            KEY_IS_ADMIN + " INTEGER," +
-            KEY_CAPACITY + " INTEGER," + // Added capacity field to the table schema
-            "FOREIGN KEY(" + KEY_STUDENT_ID + ") REFERENCES " + Student.TABLE_NAME + "(" + KEY_ID + "))";
+            KEY_IS_ADMIN + " INTEGER DEFAULT 0," + // Match default value
+            KEY_CAPACITY + " INT UNSIGNED," + // Add capacity field
+            "FOREIGN KEY(" + KEY_STUDENT_ID + ") REFERENCES " + Student.TABLE_NAME + "(" + Student.KEY_ID + "))"; // Match foreign key reference
 
     public Hostel() {
     }

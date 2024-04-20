@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.hms.views.AddHostelActivity;
 import com.example.hms.views.AddRoomActivity;
+import com.example.hms.views.BookRoomActivity;
 import com.example.hms.views.HostelsActivity;
 import com.example.hms.views.StudentManager;
 import androidx.work.ExistingPeriodicWorkPolicy;
@@ -76,7 +77,13 @@ public class MainActivity extends AppCompatActivity {
             startActivity(loginIntent);
             finish(); // Close this activity to prevent going back
         }
-
+        btnBooking.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent booking = new Intent(getApplicationContext(), BookRoomActivity.class);
+            startActivity(booking);
+          }
+        });
         btnStudentManagement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

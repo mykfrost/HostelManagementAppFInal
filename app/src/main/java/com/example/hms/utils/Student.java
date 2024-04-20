@@ -2,7 +2,7 @@ package com.example.hms.utils;
 
 public class Student {
 
-    public static final String TABLE_NAME = "students";
+    public static final String TABLE_NAME = "student";
     public static final String KEY_ID = "id";
     public static final String KEY_NAME = "student_name";
     public static final String KEY_EMAIL = "student_email";
@@ -15,6 +15,7 @@ public class Student {
     public Student(int id, String student_name,String student_email, String registration_no, String guardian, String phone) {
         this.id = id;
         this.student_name = student_name;
+        this.student_email = student_email;
         this.registration_no = registration_no;
         this.guardian = guardian;
         this.phone = phone;
@@ -30,13 +31,14 @@ public class Student {
 //            /* No foreign key needed here for this relationship */
 //            ")";
 public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" +
-        KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+        KEY_ID + " INT(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT," +  // Updated data type and primary key definition
         KEY_NAME + " TEXT," +
         KEY_EMAIL + " TEXT," +
         KEY_REGISTRATION + " TEXT," +
         KEY_GUARDIAN + " TEXT," +
         KEY_PHONE + " TEXT" +
         ");";
+
 
 
     public int getId() {
@@ -81,6 +83,16 @@ public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" +
 
     private  int id;
     private  String student_name;
+
+    public String getEmail() {
+        return student_email;
+    }
+
+    public void setEmail(String email) {
+        this.student_email = email;
+    }
+
+    private String student_email ;
     private  String registration_no;
     private  String guardian;
     private  String  phone;
