@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".views.AddHostelActivity">
+
+    <EditText
+        android:id="@+id/edtHostelName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Hostel Name"
+        android:inputType="text"
+        android:maxLength="50"
+        android:padding="16dp" />
+
+    <EditText
+        android:padding="16dp"
+        android:id="@+id/edTextDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Description"
+        android:inputType="textMultiLine"
+        android:lines="4"
+        android:maxLength="255" />
+
+    <EditText
+        android:padding="16dp"
+        android:id="@+id/edTextAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Address"
+        android:inputType="textPostalAddress"
+        android:maxLength="100" />
+
+    <EditText
+        android:padding="16dp"
+        android:id="@+id/edTextCity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="City"
+        android:inputType="textCapSentences"
+        android:maxLength="50" />
+
+    <EditText
+        android:padding="16dp"
+        android:id="@+id/edTextCountry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Country"/>
+    <EditText
+        android:padding="16dp"
+        android:id="@+id/edTextCapacity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_capacity"/>
+    <Button
+        android:id="@+id/btnAddHostel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="Add Hostel" />
+</LinearLayout>

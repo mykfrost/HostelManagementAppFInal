@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">HMS</string>
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_button_text">Login</string>
+    <string name="already_nhave_an_naccount">Already \nhave an \nAccount?</string>
+    <string name="register">Register</string>
+    <string name="new_user_register_now">New user? Register Now</string>
+    <string name="use_other_methods">Use other Methods</string>
+    <string name="facebook">Facebook</string>
+    <string name="google_plus">Google Plus</string>
+    <string name="add">Add</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="name">Name</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="here_s_nyour_first_nstep_with_nus">Here’s\nyour first\nstep with \nus!</string>
+    <string name="login_hero">login_hero</string>
+    <string name="banner1">Hostel Banner</string>
+    <string name="registration_number">Registration Number</string>
+    <string name="guardian">Guardian</string>
+    <string name="phone">Phone</string>
+    <string name="add_student">Add Student</string>
+    <string name="full_name">Full Name</string>
+    <string name="full_name_">"Full Name: "</string>
+    <string name="add_details">Add Details</string>
+    <string name="city">City</string>
+    <string name="country">Country</string>
+    <string name="address">Address</string>
+    <string name="hostel_name">Hostel Name</string>
+    <string name="i_m_a_supporting_text_very_lorem_ipsum_dolor_sit_amet_consectetur_adipiscing_elit_sed_do_eiusmod_tempor_incididunt_ut_labore_et_dolore_magna_aliqua_ut_enim_ad_minim_veniam_quis_nostrud_exercitation_ullamco_laboris_nisi_ut_aliquip_ex_ea_commodo_consequat_duis_aute_irure_dolor_in_reprehenderit_in_voluptate_velit_esse_cillum_dolore_eu_fugiat_nulla_pariatur_excepteur_sint_occaecat_cupidatat_non_proident_sunt_in_culpa_qui_officia_deserunt_mollit_anim_id_est_laborum">I\'m a supporting text. Very Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+    <string name="select_room_type">Select Room Type</string>
+    <string name="hint_capacity">Capacity</string>
+    <string name="hint_price">Price</string>
+    <string name="hint_description">Description</string>
+    <string name="button_add_room">Add Room</string>
+</resources>

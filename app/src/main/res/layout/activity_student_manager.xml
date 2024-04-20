@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/register_bk_color"
+    android:padding="16dp"
+    tools:context=".views.StudentManager">
+    <EditText
+        android:layout_margin="10dp"
+        android:padding="16dp"
+        android:editable="false"
+        android:id="@+id/editTextFullName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/full_name"
+        android:importantForAutofill="no" />
+
+    <EditText
+        android:layout_margin="10dp"
+        android:padding="16dp"
+        android:editable="false"
+        android:id="@+id/editTextEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email" />
+
+    <EditText
+        android:layout_margin="10dp"
+        android:padding="16dp"
+        android:id="@+id/editTextRegnumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/registration_number" />
+    <EditText
+        android:layout_margin="10dp"
+        android:padding="16dp"
+        android:inputType="text"
+        android:id="@+id/editTextguardian"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/guardian"
+        android:importantForAutofill="no" />
+    <EditText
+        android:layout_margin="10dp"
+        android:padding="16dp"
+        android:inputType="phone"
+        android:id="@+id/editTextPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/phone"
+        android:importantForAutofill="no" />
+
+
+    <Button
+        android:layout_margin="20sp"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/btnAddDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_details" />
+</LinearLayout>
