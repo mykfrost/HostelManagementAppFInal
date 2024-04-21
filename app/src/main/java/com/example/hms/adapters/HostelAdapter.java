@@ -21,13 +21,10 @@ public class HostelAdapter extends RecyclerView.Adapter<HostelAdapter.HostelView
     private Context context;
 
 
-public HostelAdapter(List<Hostel> hostelList, Context context) {
-    this.hostelList = hostelList;
-    this.context = context;
-
-}
-
-
+    public HostelAdapter(List<Hostel> hostelList, Context context) {
+        this.hostelList = hostelList;
+        this.context = context;
+    }
     @NonNull
     @Override
     public HostelAdapter.HostelViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -36,36 +33,30 @@ public HostelAdapter(List<Hostel> hostelList, Context context) {
         return new HostelViewHolder(view);
     }
 
+    @Override
+    public void onBindViewHolder(@NonNull HostelAdapter.HostelViewHolder holder, int position) {
+        Hostel hostel = hostelList.get(position);
+        holder.hostelNameTextView.setText(hostel.getHostelName());
 
 
-@Override
-public void onBindViewHolder(@NonNull HostelAdapter.HostelViewHolder holder, int position) {
-    Hostel hostel = hostelList.get(position);
-    holder.hostelNameTextView.setText(hostel.getHostelName());
+        holder.itemView.setOnClickListener(v -> {
+            // Handle item click here
+            Intent intent = new Intent(context, HostelDetailsActivity.class);
+            intent.putExtra("hostel_id", hostel.getId());
+            intent.putExtra("hostel_name", hostel.getHostelName());
+            intent.putExtra("description", hostel.getDescription());
+            intent.putExtra("address", hostel.getAddress());
+            intent.putExtra("city", hostel.getCity());
+            intent.putExtra("country", hostel.getCountry());
+            intent.putExtra("capacity", hostel.getCapacity());
+            context.startActivity(intent);
 
-
-    holder.itemView.setOnClickListener(v -> {
-        // Handle item click here
-        Intent intent = new Intent(context, HostelDetailsActivity.class);
-        intent.putExtra("hostel_id", hostel.getId());
-        intent.putExtra("hostel_name", hostel.getHostelName());
-        intent.putExtra("description", hostel.getDescription());
-        intent.putExtra("address", hostel.getAddress());
-        intent.putExtra("city", hostel.getCity());
-        intent.putExtra("country", hostel.getCountry());
-        intent.putExtra("capacity", hostel.getCapacity());
-        context.startActivity(intent);
-
-    });
-}
-//    @Override
-//    public int getItemCount() {
-//        return 0;
-//    }
-@Override
-public int getItemCount() {
-    return hostelList.size();
-}
+        });
+    }
+    @Override
+    public int getItemCount() {
+        return hostelList.size();
+    }
     public static class HostelViewHolder extends RecyclerView.ViewHolder {
         TextView hostelNameTextView,roomCount , descriptionTextView, addressTextView , cityTextView , countryTextview;
 
@@ -77,10 +68,8 @@ public int getItemCount() {
 //            cityTextView = itemView.findViewById(R.id.item_city);
 //            countryTextview = itemView.findViewById(R.id.item_country);
             hostelNameTextView = itemView.findViewById(R.id.hostel_name);
-           // roomCount = itemView.findViewById(R.id.rooms_count);
+            // roomCount = itemView.findViewById(R.id.rooms_count);
         }
     }
-
-
 
 }

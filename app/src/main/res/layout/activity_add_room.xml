@@ -9,6 +9,13 @@
     android:orientation="vertical"
     tools:context=".views.AddRoomActivity">
     <Spinner
+        android:layout_marginBottom="16dp"
+        android:id="@+id/spinnerHostels"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp" />
+    <Spinner
+        android:entries="@array/room_types"
         android:id="@+id/spinnerRoomType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

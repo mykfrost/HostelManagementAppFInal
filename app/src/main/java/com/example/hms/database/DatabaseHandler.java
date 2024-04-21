@@ -274,7 +274,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 
 
-    public long addRoom(  String room_type, String capacity, String price, String description) {
+    public long addRoom(  String room_type, String capacity, String price, String description, int hostel_id ) {
         // get writable database as we want to write data
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -285,6 +285,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(Room.KEY_CAPACITY, capacity);
         values.put(Room.KEY_PRICE, price);
         values.put(Room.KEY_DESCRIPTION, description);
+        values.put(Room.KEY_HOSTEL_ID, hostel_id);
 
         // insert row
         long id = db.insert(Room.TABLE_NAME, null, values);

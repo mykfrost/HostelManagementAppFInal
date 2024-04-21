@@ -13,14 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hms.R;
 import com.example.hms.adapters.RoomBookingAdapter;
+import com.example.hms.utils.Hostel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewRoomsActivity extends AppCompatActivity implements RoomBookingAdapter.OnItemClickListener {
+public class ViewRoomsActivity extends AppCompatActivity  {
     private RecyclerView recyclerView;
     private RoomBookingAdapter adapter;
-    private List<String> itemList;
+    private List<Hostel> hostelist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,25 +33,41 @@ public class ViewRoomsActivity extends AppCompatActivity implements RoomBookingA
             return insets;
         });
 
-        itemList = new ArrayList<>();
-        itemList.add("Item 1");
-        itemList.add("Item 2");
-        itemList.add("Item 3");
-        itemList.add("Item 4");
-        itemList.add("Item 5");
 
         recyclerView = findViewById(R.id.recyclerviewRoomsRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new RoomBookingAdapter();
 
         recyclerView.setAdapter(adapter);
-        // Set item click listener for the adapter
-       // adapter.OnItemClickListener(this);
+        // Sample data for hostels
+        String[] hostelData = {
+                "Cozy Haven Hostel,Comfortable accommodation with friendly atmosphere and great amenities.,123 Main Street,New York,USA,150",
+                "Serene Oasis Hostel,Peaceful and tranquil hostel offering a relaxing stay with beautiful surroundings.,456 Park Avenue,Los Angeles,USA,120",
+                "Urban Adventure Hostel,Exciting urban experience with modern facilities and vibrant atmosphere.,789 Downtown Boulevard,Chicago,USA,180",
+                "Coastal Escape Hostel,Coastal retreat offering stunning ocean views and outdoor activities.,101 Oceanfront Drive,Miami,USA,160",
+                "Mountain View Hostel,Spectacular mountain vistas and cozy rooms for a memorable stay.,222 Alpine Road,Denver,USA,190",
+                "Cultural Hub Hostel,Immerse yourself in local culture and artsy ambiance at this unique hostel.,333 Artisan Lane,San Francisco,USA,170",
+                "Green Oasis Hostel,Eco-friendly accommodation surrounded by lush greenery and nature trails.,444 Eco Avenue,Seattle,USA,130",
+                "Lakeside Retreat Hostel,Tranquil lakeside setting with water activities and serene environment.,555 Lakefront Road,Minneapolis,USA,110",
+                "Historic Charm Hostel,Stay in a charming historic building with modern amenities and nostalgic vibes.,666 Heritage Lane,Boston,USA,100",
+                "Tropical Paradise Hostel,Tropical paradise offering beachfront accommodation and island adventures.,777 Seaside Avenue,Honolulu,USA,200"
+        };
+
+        // Process and add hostel data to the list
+        for (String hostelStr : hostelData) {
+            String[] hostelDetails = hostelStr.split(",");
+            Hostel hostel = new Hostel();
+            hostel.setHostelName(hostelDetails[0]);
+            hostel.setDescription(hostelDetails[1]);
+            hostel.setAddress(hostelDetails[2]);
+            hostel.setCity(hostelDetails[3]);
+            hostel.setCountry(hostelDetails[4]);
+            hostel.setCapacity(Integer.parseInt(hostelDetails[5]));
+            hostelist.add(hostel);
+        }
+
+        // Notify the adapter that the data set has changed
+        adapter.notifyDataSetChanged();
     }
-    @Override
-    public void onItemClick(int position) {
-        String selectedItem = itemList.get(position);
-        Toast.makeText(this, "Selected Item: " + selectedItem, Toast.LENGTH_SHORT).show();
-        // You can perform further actions based on the selected item here
-    }
+
 }

@@ -34,4 +34,14 @@
     <string name="hint_price">Price</string>
     <string name="hint_description">Description</string>
     <string name="button_add_room">Add Room</string>
+    <string-array name="room_types">
+        <item>Dorm Room</item>
+        <item>Private Room</item>
+        <item>Ensuite Room</item>
+        <item>Female Dorm</item>
+        <item>Male Dorm</item>
+        <item>Family Room</item>
+        <item>Pod Dorm</item>
+        <!-- Add more room types as needed -->
+    </string-array>
 </resources>

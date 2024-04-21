@@ -1,5 +1,7 @@
 package com.example.hms.adapters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hms.R;
 import com.example.hms.utils.Hostel;
+import com.example.hms.views.HostelDetailsActivity;
 
 import java.util.List;
 
 public class RoomBookingAdapter extends RecyclerView.Adapter<RoomBookingAdapter.ViewHolder> {
     private List<Hostel> itemList;
+    private Context context;
 
     private OnItemClickListener listener;
 
@@ -22,9 +26,9 @@ public class RoomBookingAdapter extends RecyclerView.Adapter<RoomBookingAdapter.
         void onItemClick(int position);
     }
 
-    public void RoomBookingAdapterMyAdapter(List<Hostel> itemList, OnItemClickListener listener) {
+    public void RoomBookingAdapterMyAdapter(List<Hostel> itemList, Context context) {
         this.itemList = itemList;
-        this.listener = listener;
+        this.context = context;
     }
 
     @NonNull
@@ -36,8 +40,21 @@ public class RoomBookingAdapter extends RecyclerView.Adapter<RoomBookingAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Hostel  item = itemList.get(position);
-        holder.bind(String.valueOf(item));
+        Hostel  hostel = itemList.get(position);
+        holder.hostelNameTextView.setText(hostel.getHostelName());
+        holder.itemView.setOnClickListener(v -> {
+            // Handle item click here
+            Intent intent = new Intent(context, HostelDetailsActivity.class);
+            intent.putExtra("hostel_id", hostel.getId());
+            intent.putExtra("hostel_name", hostel.getHostelName());
+            intent.putExtra("description", hostel.getDescription());
+            intent.putExtra("address", hostel.getAddress());
+            intent.putExtra("city", hostel.getCity());
+            intent.putExtra("country", hostel.getCountry());
+            intent.putExtra("capacity", hostel.getCapacity());
+            context.startActivity(intent);
+
+        });
     }
 
     @Override
@@ -46,24 +63,12 @@ public class RoomBookingAdapter extends RecyclerView.Adapter<RoomBookingAdapter.
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView textViewListItem;
+        TextView hostelNameTextView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            textViewListItem = itemView.findViewById(R.id.textViewRoomListItem);
-
-            itemView.setOnClickListener(v -> {
-                if (listener != null) {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        listener.onItemClick(position);
-                    }
-                }
-            });
+            hostelNameTextView = itemView.findViewById(R.id.hostel_name);
         }
 
-        public void bind(String item) {
-            textViewListItem.setText(item);
-        }
     }
 }

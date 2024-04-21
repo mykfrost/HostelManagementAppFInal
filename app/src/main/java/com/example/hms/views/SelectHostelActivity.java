@@ -1,7 +1,6 @@
 package com.example.hms.views;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hms.R;
 import com.example.hms.SessionManager;
-import com.example.hms.adapters.HostelAdapter;
+import com.example.hms.adapters.SelectHostelAdapter;
 import com.example.hms.database.DatabaseHandler;
 import com.example.hms.utils.Hostel;
 import com.example.hms.utils.Room;
@@ -31,7 +30,7 @@ public class SelectHostelActivity extends AppCompatActivity {
     TextView  editTextRoomId, editTextHostelId, editTextStudentId;
     private Button buttonBook;
     SessionManager sessionManager ;
-    private HostelAdapter adapter;
+    private SelectHostelAdapter adapter;
     private List<Hostel> hostelList;
     private  Room room ;
     private Hostel hostel ;
@@ -85,7 +84,7 @@ public class SelectHostelActivity extends AppCompatActivity {
         hostelList.addAll(databaseHelper.getAllHostels());
 
         // Initialize RecyclerView adapter
-        adapter = new HostelAdapter(hostelList, this);
+        adapter = new SelectHostelAdapter(hostelList, this);
 
         // Set RecyclerView layout manager and adapter
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
