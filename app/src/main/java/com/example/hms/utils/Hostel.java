@@ -24,41 +24,48 @@ public class Hostel {
     private String country;
     private String email;
     private String fullName;
-    private int isAdmin;
-    private int capacity; // Capacity field
 
-    // SQL statement to create the hostels table
-//    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
-//            "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-//            KEY_STUDENT_ID + " INTEGER," +
-//            KEY_NAME + " TEXT," +
-//            KEY_DESCRIPTION + " TEXT," +
-//            KEY_ADDRESS + " TEXT," +
-//            KEY_CITY + " TEXT," +
-//            KEY_COUNTRY + " TEXT," +
-//            KEY_EMAIL + " TEXT," +
-//            KEY_FULL_NAME + " TEXT," +
-//            KEY_IS_ADMIN + " INTEGER," +
-//            KEY_CAPACITY + " INTEGER," + // Added capacity field to the table schema
-//            "FOREIGN KEY(" + KEY_STUDENT_ID + ") REFERENCES " + Student.TABLE_NAME + "(" + KEY_ID + "))";
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+    private boolean isAdmin;
+    private int capacity; // Capacity field
     public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
-            "(" + KEY_ID + " INT UNSIGNED PRIMARY KEY AUTOINCREMENT," + // Match data type and constraints
-            KEY_STUDENT_ID + " INT UNSIGNED," + // Match data type and constraints
+            "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + // Use INTEGER PRIMARY KEY for AUTOINCREMENT
+            KEY_STUDENT_ID + " INTEGER UNSIGNED," + // Correct data type
             KEY_NAME + " TEXT NOT NULL," +
             KEY_DESCRIPTION + " TEXT," +
             KEY_ADDRESS + " TEXT," +
             KEY_CITY + " TEXT," +
             KEY_COUNTRY + " TEXT," +
-            KEY_EMAIL + " TEXT," +
             KEY_FULL_NAME + " TEXT," +
-            KEY_IS_ADMIN + " INTEGER DEFAULT 0," + // Match default value
-            KEY_CAPACITY + " INT UNSIGNED," + // Add capacity field
-            "FOREIGN KEY(" + KEY_STUDENT_ID + ") REFERENCES " + Student.TABLE_NAME + "(" + Student.KEY_ID + "))"; // Match foreign key reference
+            KEY_IS_ADMIN + " INTEGER DEFAULT 0," +
+            KEY_CAPACITY + " INTEGER UNSIGNED," + // Correct data type
+            "FOREIGN KEY(" + KEY_STUDENT_ID + ") REFERENCES " + Student.TABLE_NAME + "(" + Student.KEY_ID + "))";
+
+
+//    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
+//            "(" + KEY_ID + " INT UNSIGNED PRIMARY KEY AUTOINCREMENT," + // Match data type and constraints
+//            KEY_STUDENT_ID + " INT UNSIGNED," + // Match data type and constraints
+//            KEY_NAME + " TEXT NOT NULL," +
+//            KEY_DESCRIPTION + " TEXT," +
+//            KEY_ADDRESS + " TEXT," +
+//            KEY_CITY + " TEXT," +
+//            KEY_COUNTRY + " TEXT," +
+//            KEY_FULL_NAME + " TEXT," +
+//            KEY_IS_ADMIN + " INTEGER DEFAULT 0," + // Match default value
+//            KEY_CAPACITY + " INT UNSIGNED," + // Add capacity field
+//            "FOREIGN KEY(" + KEY_STUDENT_ID + ") REFERENCES " + Student.TABLE_NAME + "(" + Student.KEY_ID + "))"; // Match foreign key reference
 
     public Hostel() {
     }
 
-    public Hostel(int id, int studentId, String hostelName, String description, String address, String city, String country, String email, String fullName, int isAdmin, int capacity) {
+    public Hostel(int id, int studentId, String hostelName, String description, String address, String city, String country, String fullName, boolean isAdmin, int capacity) {
         this.id = id;
         this.studentId = studentId;
         this.hostelName = hostelName;
@@ -66,7 +73,18 @@ public class Hostel {
         this.address = address;
         this.city = city;
         this.country = country;
-        this.email = email;
+        this.fullName = fullName;
+        this.isAdmin = isAdmin;
+        this.capacity = capacity; // Initialize capacity
+    }
+
+   //hostelname, description, address, city, country, fullName,isAdmin,capacity
+    public Hostel( String hostelName, String description, String address, String city, String country, String fullName, boolean isAdmin, int capacity) {
+        this.hostelName = hostelName;
+        this.description = description;
+        this.address = address;
+        this.city = city;
+        this.country = country;
         this.fullName = fullName;
         this.isAdmin = isAdmin;
         this.capacity = capacity; // Initialize capacity
@@ -151,14 +169,6 @@ public class Hostel {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
-    }
-
-    public int getIsAdmin() {
-        return isAdmin;
-    }
-
-    public void setIsAdmin(int isAdmin) {
-        this.isAdmin = isAdmin;
     }
 
     public int getNumberOfRooms() {

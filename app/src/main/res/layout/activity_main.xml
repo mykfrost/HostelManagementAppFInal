@@ -96,6 +96,11 @@
         android:layout_width="200sp"
         android:layout_height="wrap_content"
         android:text="Feedback Management" />
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
 
     <Button

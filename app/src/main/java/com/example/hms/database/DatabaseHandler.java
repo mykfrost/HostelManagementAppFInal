@@ -35,7 +35,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // Database Name
-    private static final String DATABASE_NAME = "hostel_management";
+    private static final String DATABASE_NAME = "lhxslmzq_android";
 
 
 
@@ -296,38 +296,55 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return id;
     }
 
-    public long addHostel(String hostel_name, String description, String address, String city, String country,String capacity) {
-        // get writable database as we want to write data
-        SQLiteDatabase db = this.getWritableDatabase();
+//    public long addHostel(String hostel_name, String description, String address, String city, String country,String capacity) {
+//        // get writable database as we want to write data
+//        SQLiteDatabase db = this.getWritableDatabase();
+//
+//        ContentValues values = new ContentValues();
+//        // `id` and `timestamp` will be inserted automatically.
+//        // no need to add them
+//
+//        values.put(Hostel.KEY_NAME, hostel_name);
+//        values.put(Hostel.KEY_DESCRIPTION, description);
+//        values.put(Hostel.KEY_ADDRESS, address);
+//        values.put(Hostel.KEY_CITY, city);
+//        values.put(Hostel.KEY_COUNTRY, country);
+//        values.put(Hostel.KEY_CAPACITY, capacity);
+//
+//        // insert row
+//        long id = db.insert(Hostel.TABLE_NAME, null, values);
+//
+//        // close db connection
+//        db.close();
+//        return id;
+//    }
+public long addHostel(String hostel_name, String description, String address,
+                      String city, String country, String fullName,boolean isAdmin , int capacity) {
 
-        ContentValues values = new ContentValues();
-        // `id` and `timestamp` will be inserted automatically.
-        // no need to add them
+    // Get writable database
+    SQLiteDatabase db = this.getWritableDatabase();
 
-        values.put(Hostel.KEY_NAME, hostel_name);
-        values.put(Hostel.KEY_DESCRIPTION, description);
-        values.put(Hostel.KEY_ADDRESS, address);
-        values.put(Hostel.KEY_CITY, city);
-        values.put(Hostel.KEY_COUNTRY, country);
-        values.put(Hostel.KEY_CAPACITY, capacity);
+    // Create ContentValues to store hostel data
+    ContentValues values = new ContentValues();
+    values.put(Hostel.KEY_NAME, hostel_name);
+    values.put(Hostel.KEY_DESCRIPTION, description);
+    values.put(Hostel.KEY_ADDRESS, address);
+    values.put(Hostel.KEY_CITY, city);
+    values.put(Hostel.KEY_COUNTRY, country);
+    values.put(Hostel.KEY_FULL_NAME, fullName);
+    values.put(Hostel.KEY_IS_ADMIN,isAdmin ? 1 : 0);
+    values.put(Hostel.KEY_CAPACITY, capacity);
 
-        // insert row
-        long id = db.insert(Hostel.TABLE_NAME, null, values);
 
-        // close db connection
-        db.close();
-        // return newly inserted row id
-        // Get user role and email from session manager
-        boolean isAdmin = sessionManager.isAdmin();
-        String email = sessionManager.getEmail();
-        String fullName = sessionManager.getFullName();
+    // Insert hostel data in the table
+    long hostelId = db.insert(Hostel.TABLE_NAME, null, values);
 
-        // Call the PHP script to upload hostel details to the server
-        //uploadHostelToServer(hostel_name, description, address, city, country, email, fullName, isAdmin);
-        // return newly inserted row id
-        return id;
-    }
+    // Close the database connection
+    db.close();
 
+    // Return the newly inserted hostel's ID
+    return hostelId;
+}
     public long addBooking( String check_in, String check_out,  String price) {
         // get writable database as we want to write data
         SQLiteDatabase db = this.getWritableDatabase();
@@ -400,9 +417,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 cursor.getString(cursor.getColumnIndex(Hostel.KEY_ADDRESS)),
                 cursor.getString(cursor.getColumnIndex(Hostel.KEY_CITY)),
                 cursor.getString(cursor.getColumnIndex(Hostel.KEY_COUNTRY)),
-                cursor.getString(cursor.getColumnIndex(Hostel.KEY_EMAIL)),
                 cursor.getString(cursor.getColumnIndex(Hostel.KEY_FULL_NAME)),
-                cursor.getInt(cursor.getColumnIndex(Hostel.KEY_IS_ADMIN)),
+                cursor.getInt(cursor.getColumnIndex(Hostel.KEY_IS_ADMIN)) == 1,
                 cursor.getInt(cursor.getColumnIndex(Hostel.KEY_CAPACITY)));
 
         // close the db connection

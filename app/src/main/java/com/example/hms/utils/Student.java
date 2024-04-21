@@ -30,14 +30,23 @@ public class Student {
 //            KEY_PHONE + " TEXT," +
 //            /* No foreign key needed here for this relationship */
 //            ")";
-public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" +
-        KEY_ID + " INT(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT," +  // Updated data type and primary key definition
-        KEY_NAME + " TEXT," +
-        KEY_EMAIL + " TEXT," +
-        KEY_REGISTRATION + " TEXT," +
-        KEY_GUARDIAN + " TEXT," +
-        KEY_PHONE + " TEXT" +
-        ");";
+//public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" +
+//        KEY_ID + " INT(11) UNSIGNED PRIMARY KEY AUTO_INCREMENT," +  // Updated data type and primary key definition
+//        KEY_NAME + " TEXT," +
+//        KEY_EMAIL + " TEXT," +
+//        KEY_REGISTRATION + " TEXT," +
+//        KEY_GUARDIAN + " TEXT," +
+//        KEY_PHONE + " TEXT" +
+//        ");";
+
+    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" +
+            KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +  // Updated data type and primary key definition
+            KEY_NAME + " TEXT," +
+            KEY_EMAIL + " TEXT," +
+            KEY_REGISTRATION + " TEXT," +
+            KEY_GUARDIAN + " TEXT," +
+            KEY_PHONE + " TEXT" +
+            ");";
 
 
 

@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -25,21 +27,41 @@ import java.util.Map;
 public class LoginActivity extends AppCompatActivity {
     EditText emailEditText, passwordEditText;
     SessionManager sessionManager ;
+    private ProgressBar progressBar;
 
     User user ;
     private static final String TAG = "LoginActivity";
     private RequestQueue requestQueue;
+    Button login;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         emailEditText = findViewById(R.id.editTextEmail);
         passwordEditText = findViewById(R.id.editTextPassword);
+        login = findViewById(R.id.btnLogin);
         sessionManager = new SessionManager(getApplicationContext());
 
+        // Check if the user is already logged in
+        if (sessionManager.isLoggedIn()) {
+            // If logged in, redirect to MainActivity
+            redirectToMain();
+        }
+        // Initialize progress bar
+        progressBar = findViewById(R.id.progressBar);
+        sessionManager = new SessionManager(getApplicationContext());
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onLoginClick();
+                clearFields();
+            }
+        });
 
     }
-    public void onLoginClick(View view) {
+
+    public void onLoginClick() {
+        showProgressBar();
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
         String loginUrl = "https://pmenergies.co.ke/android/login.php";
@@ -53,26 +75,38 @@ public class LoginActivity extends AppCompatActivity {
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, loginUrl, jsonObject,
                 response -> {
+                   hideProgressBar();
                     try {
                         int status = response.getInt("status");
                         String message = response.getString("message");
-
+                        Log.d(TAG, "Login Response: " + response.toString());
                         if (status == 0) {
+                            updateSessionData(response); // Update session data with response fields
                             String fullName = response.getString("full_name");
-                            String eMail = response.getString("email");
                             String userRole = response.getString("user_role");
-
-                            User user = new User(eMail, fullName, userRole);
-                            sessionManager.createLoginSession(user);
                             Toast.makeText(getApplicationContext(), "Welcome, " + fullName, Toast.LENGTH_SHORT).show();
                             // Redirect to next activity or perform other actions
                             Intent register = new Intent(getApplicationContext(),MainActivity.class);
-                            Toast.makeText(getApplicationContext(), "Welcome, " + fullName, Toast.LENGTH_SHORT).show();
-                            ;
                             register.putExtra("full_names", fullName);
-                            register.putExtra("email", eMail);
+                            register.putExtra("role", userRole);
                             startActivity(register);
                             finish();
+//                            int userId = response.getInt("user_id");
+//                            String fullName = response.getString("full_name");
+//                            String userRole = response.getString("user_role");
+//
+//
+//                            User user = new User(fullName, userRole);
+//                            sessionManager.createLoginSession(user,3600000);
+//                            Toast.makeText(getApplicationContext(), "Welcome, " + fullName, Toast.LENGTH_SHORT).show();
+//                            // Redirect to next activity or perform other actions
+//                            Intent register = new Intent(getApplicationContext(),MainActivity.class);
+//                            Toast.makeText(getApplicationContext(), "Welcome, " + fullName, Toast.LENGTH_SHORT).show();
+//                            register.putExtra("full_names", fullName);
+//                            //register.putExtra("email", eMail);
+//                            register.putExtra("role", userRole);
+//                            startActivity(register);
+//                            finish();
 
                         } else {
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
@@ -83,6 +117,7 @@ public class LoginActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }, error -> {
+            hideProgressBar();
             Log.e("LoginError", "Error: " + error.getMessage());
             Toast.makeText(getApplicationContext(), "Error occurred. Please try again.", Toast.LENGTH_SHORT).show();
         }){
@@ -99,6 +134,37 @@ public class LoginActivity extends AppCompatActivity {
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
     }
 
+    private void updateSessionData(JSONObject response) {
+        try {
+            int userId = response.getInt("user_id");
+            String fullName = response.getString("full_name");
+            String userRole = response.getString("user_role");
+
+            // Create User object with fetched data
+            User user = new User(fullName, userRole);
+
+            // Update session manager with user data
+            sessionManager.createLoginSession(user, 3600000);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    private void redirectToMain() {
+        Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(mainIntent);
+        finish();
+    }
+    private void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
+    }
+public  void clearFields(){
+        emailEditText.setText("");
+        passwordEditText.setText("");
+}
     public void reg(View v){
         Intent register = new Intent(getApplicationContext(),RegisterActivity.class);
         startActivity(register);

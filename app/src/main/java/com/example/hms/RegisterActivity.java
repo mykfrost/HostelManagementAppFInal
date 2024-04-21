@@ -28,6 +28,7 @@ public class RegisterActivity extends AppCompatActivity {
     SessionManager sessionManager;
     EditText fullNameEditText, emailEditText, passwordEditText;
     TextView login ;
+    User user ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,14 +46,15 @@ public void onLoginClick(View v){
 }
     public void register(View view) {
         String email = emailEditText.getText().toString().trim();
-        String password =    passwordEditText.getText().toString().trim();
+        String password = passwordEditText.getText().toString().trim();
         String fullName = fullNameEditText.getText().toString().trim();
-
+        String userRole = sessionManager.isAdmin() ? "admin" : "user";
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("email", email);
             jsonObject.put("password", password);
             jsonObject.put("full_name", fullName);
+            jsonObject.put("role", userRole);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -64,31 +66,29 @@ public void onLoginClick(View v){
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        // Log.d(TAG, "Server Response: " + response.toString());
                         try {
-                            Log.d(TAG, "Server Response: " + response.toString());
                             int status = response.getInt("status");
                             String message = response.getString("message");
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
                             if (status == 0) {
-                                // Registration successful, handle accordingly
-                                // For example, redirect to login page
-                                Intent Login  = new Intent(getApplicationContext(), LoginActivity.class);
-                                startActivity(Login);
+                                String userRole = sessionManager.isAdmin() ? "admin" : "user";
+                                user = new User( fullName, userRole);
+                                sessionManager.createLoginSession(user, 3600000); // Set timeout to 1 hour (3600000 milliseconds)
+                                Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                                startActivity(loginIntent);
                             } else if (status == 1) {
-                                // User already exists, show appropriate message
-                                Toast.makeText(RegisterActivity.this, "Error User Already Exists", Toast.LENGTH_SHORT).show();
-                                Intent Main  = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(Main);
+                                Toast.makeText(RegisterActivity.this, "Invalid Email and/or Password", Toast.LENGTH_SHORT).show();
+                                Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(mainIntent);
                             } else {
-                                // Missing mandatory parameters, show appropriate message
                                 Toast.makeText(RegisterActivity.this, "Error Missing Mandatory Parameters", Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
+
                 },
                 new Response.ErrorListener() {
                     @Override

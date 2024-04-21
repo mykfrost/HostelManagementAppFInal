@@ -10,7 +10,7 @@ import com.example.hms.R;
 import com.example.hms.SessionManager;
 import com.example.hms.database.DatabaseHandler;
 import com.example.hms.utils.Hostel;
-import com.example.hms.utils.HostelAdapter;
+import com.example.hms.adapters.HostelAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

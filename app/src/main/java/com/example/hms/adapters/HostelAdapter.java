@@ -1,4 +1,4 @@
-package com.example.hms.utils;
+package com.example.hms.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,8 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hms.R;
-import com.example.hms.SessionManager;
-import com.example.hms.database.DatabaseHandler;
+import com.example.hms.utils.Hostel;
 import com.example.hms.views.HostelDetailsActivity;
 
 import java.util.List;

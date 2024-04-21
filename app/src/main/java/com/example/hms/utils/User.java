@@ -8,8 +8,8 @@ public class User {
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_ROLE = "role";
 
-    public User(String email,  String full_name , String role) {
-        this. email = email ;
+    public User( String full_name , String role) {
+
         this.full_name = full_name;
         this.role = role;
     }
