@@ -12,26 +12,27 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.example.hms.utils.User;
 import com.example.hms.views.AddHostelActivity;
-import com.example.hms.views.AddRoomActivity;
+import com.example.hms.views.BookingDetailsActivity;
+import com.example.hms.views.CreateNotification;
 import com.example.hms.views.HostelsActivity;
 import com.example.hms.views.StudentManager;
-import com.example.hms.views.ViewRoomsActivity;
-
+import com.example.hms.views.SelectHostelActivity;
 import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.Operation;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView tvFullName, tvEmail , tvRole;
+    private TextView tvFullName, tvRole;
     private ProgressBar progressBar;
-    private static final String TAG = "INtent Extras";
+    private static final String TAG = "Intent Extras";
 
     private SessionManager sessionManager;
-    Button     btnAddHostels ,btnAddRoom, btnAdminPanel ,btnStudentManagement, btnViewHostels  ,btnRoomAvailability, btnBooking ,btnFeedbackManagement;
+    Button btnViewBooking, btnAddHostels, btnAddRoom, btnStudentManagement, btnViewHostels, btnRoomAvailability, btnBooking, btnFeedbackManagement;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,14 +44,12 @@ public class MainActivity extends AppCompatActivity {
         btnViewHostels = findViewById(R.id.btnViewHostels);
         btnRoomAvailability = findViewById(R.id.btnRoomAvailability);
         btnBooking = findViewById(R.id.btnBooking);
-        btnAdminPanel = findViewById(R.id.btnAdminPanel);
+        btnViewBooking = findViewById(R.id.btnViewBooking);
         btnFeedbackManagement = findViewById(R.id.btnNFeedbackManagement);
         btnAddHostels = findViewById(R.id.btnAddHostels);
         btnAddRoom = findViewById(R.id.btnAddrooms);
         tvRole = findViewById(R.id.tvRole);
         tvFullName = findViewById(R.id.tvFullName);
-        tvEmail = findViewById(R.id.tvEmail);
-
         sessionManager = new SessionManager(this);
 
         // Get the intent that started this activity
@@ -60,17 +59,14 @@ public class MainActivity extends AppCompatActivity {
         if (intent != null && intent.getExtras() != null) {
             // Retrieve the extras
             String fullName = intent.getStringExtra("full_names");
-            String email = intent.getStringExtra("email");
             String role = intent.getStringExtra("role");
 
             // Use the retrieved values as needed
             Log.d(TAG, "Full Name: " + fullName);
-            Log.d(TAG, "Email: " + email);
             Log.d(TAG, "Role: " + role);
 
 
             tvFullName.setText("Full Name: " + fullName);
-            tvEmail.setText("Email: " + email);
             tvRole.setText("Role: " + role);
         } else {
             Log.e(TAG, "Intent or extras not found.");
@@ -78,21 +74,19 @@ public class MainActivity extends AppCompatActivity {
         if (sessionManager.isLoggedIn()) {
             User user = new User();
             String fullName = sessionManager.getFullName();
-            String email = sessionManager.getEmail();
             String userRole = sessionManager.isAdmin() ? "admin" : "user";
             tvFullName.setText(fullName);
-            tvEmail.setText(email);
             tvRole.setText(userRole);
             // Schedule the database upload work
-            scheduleDatabaseUploadWork();
+            //scheduleDatabaseUploadWork();
             // Show user role
             if (sessionManager.isAdmin()) {
-                btnAdminPanel.setVisibility(View.VISIBLE);
                 btnAddHostels.setVisibility(View.VISIBLE);
                 btnAddRoom.setVisibility(View.VISIBLE);
+                btnViewBooking.setVisibility(View.VISIBLE);
             } else {
-                btnAdminPanel.setVisibility(View.GONE);
                 btnAddHostels.setVisibility(View.GONE);
+                btnViewBooking.setVisibility(View.GONE);
                 btnAddRoom.setVisibility(View.GONE);
             }
 
@@ -103,11 +97,26 @@ public class MainActivity extends AppCompatActivity {
             finish(); // Close this activity to prevent going back
         }
         btnBooking.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent booking = new Intent(getApplicationContext(), ViewRoomsActivity.class);
-            startActivity(booking);
-          }
+            @Override
+            public void onClick(View v) {
+                Intent booking = new Intent(getApplicationContext(), SelectHostelActivity.class);
+                startActivity(booking);
+            }
+        });
+
+        btnFeedbackManagement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(getApplicationContext(), CreateNotification.class);
+                startActivity(next);
+            }
+        });
+        btnViewBooking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent stdManager = new Intent(getApplicationContext(), BookingDetailsActivity.class);
+                startActivity(stdManager);
+            }
         });
         btnStudentManagement.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         btnAddRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent addroom = new Intent(getApplicationContext(), AddRoomActivity.class);
+                Intent addroom = new Intent(getApplicationContext(), SelectHostelActivity.class);
                 startActivity(addroom);
             }
         });
@@ -159,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                         .build();
 
         // Enqueue the work request with WorkManager
-        WorkManager.getInstance(this)
+        Operation databaseUploadWork = WorkManager.getInstance(this)
                 .enqueueUniquePeriodicWork(
                         "DatabaseUploadWork",
                         ExistingPeriodicWorkPolicy.REPLACE,

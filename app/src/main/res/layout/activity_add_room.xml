@@ -8,9 +8,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".views.AddRoomActivity">
-    <Spinner
+    <TextView
+        android:text="Selected Hostel"
         android:layout_marginBottom="16dp"
-        android:id="@+id/spinnerHostels"
+        android:id="@+id/selectedHostels"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp" />
@@ -53,4 +54,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_add_room" />
+
 </LinearLayout>

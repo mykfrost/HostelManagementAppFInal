@@ -20,7 +20,7 @@ public class DatabaseUploadWorker extends Worker {
     @Override
     public Result doWork() {
         // Call your upload method here
-        dbHandler.uploadDatabaseToServer();
+        //dbHandler.uploadDatabaseToServer();
         return Result.success(); // Return success if upload is successful
         // return null;
     }

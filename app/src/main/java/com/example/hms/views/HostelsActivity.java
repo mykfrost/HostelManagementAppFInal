@@ -19,6 +19,7 @@ import java.util.List;
 public class HostelsActivity extends AppCompatActivity  {
   RecyclerView recyclerView ;
   SessionManager sessionManager ;
+
     private HostelAdapter adapter;
     private List<Hostel> hostelList;
     DatabaseHandler databaseHelper;

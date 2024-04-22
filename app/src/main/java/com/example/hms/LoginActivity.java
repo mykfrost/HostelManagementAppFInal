@@ -91,22 +91,6 @@ public class LoginActivity extends AppCompatActivity {
                             register.putExtra("role", userRole);
                             startActivity(register);
                             finish();
-//                            int userId = response.getInt("user_id");
-//                            String fullName = response.getString("full_name");
-//                            String userRole = response.getString("user_role");
-//
-//
-//                            User user = new User(fullName, userRole);
-//                            sessionManager.createLoginSession(user,3600000);
-//                            Toast.makeText(getApplicationContext(), "Welcome, " + fullName, Toast.LENGTH_SHORT).show();
-//                            // Redirect to next activity or perform other actions
-//                            Intent register = new Intent(getApplicationContext(),MainActivity.class);
-//                            Toast.makeText(getApplicationContext(), "Welcome, " + fullName, Toast.LENGTH_SHORT).show();
-//                            register.putExtra("full_names", fullName);
-//                            //register.putExtra("email", eMail);
-//                            register.putExtra("role", userRole);
-//                            startActivity(register);
-//                            finish();
 
                         } else {
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();

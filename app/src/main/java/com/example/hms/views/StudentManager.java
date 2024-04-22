@@ -51,16 +51,16 @@ public class StudentManager extends AppCompatActivity {
                 db.addStudent(fullName, email , regNumber , guardian, phone);
                 Toast.makeText(getApplicationContext(), "Student Details Added", Toast.LENGTH_SHORT).show();
                 // Clear the EditText fields after adding details
-                edFullName.setText("");
-                edEmail.setText("");
-                edRegistration.setText("");
-                edGuardian.setText("");
-                edPhone.setText("");
+                clearFields();
             }
         });
     }
 
-    private void AddDetails(String name ,String email ,String reg ,String guardian ,String phone) {
-
+    private void clearFields() {
+        edFullName.setText("");
+        edEmail.setText("");
+        edRegistration.setText("");
+        edGuardian.setText("");
+        edPhone.setText("");
     }
 }

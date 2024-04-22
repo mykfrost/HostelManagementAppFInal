@@ -1,9 +1,6 @@
 package com.example.hms.views;
 
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,26 +15,16 @@ import com.example.hms.SessionManager;
 import com.example.hms.adapters.SelectHostelAdapter;
 import com.example.hms.database.DatabaseHandler;
 import com.example.hms.utils.Hostel;
-import com.example.hms.utils.Room;
-import com.example.hms.utils.Student;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectHostelActivity extends AppCompatActivity {
-    private EditText
-            editTextCheckInDate, editTextCheckOutDate, editTextTotalPrice;
-    TextView  editTextRoomId, editTextHostelId, editTextStudentId;
-    private Button buttonBook;
+public class SelectHostelActivity extends AppCompatActivity  {
+    private RecyclerView recyclerView;
     SessionManager sessionManager ;
+    DatabaseHandler databaseHelper;
     private SelectHostelAdapter adapter;
-    private List<Hostel> hostelList;
-    private  Room room ;
-    private Hostel hostel ;
-    private Student student ;
-     DatabaseHandler databaseHelper;
-     RecyclerView recyclerView;
-
+    private List<Hostel> hostelist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,80 +35,54 @@ public class SelectHostelActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        sessionManager = new SessionManager(this);
-        databaseHelper = new DatabaseHandler(this, sessionManager);
-        // Get Hostel STudent & Rooms
 
-//        // Fetch Hostel and Student details from the database based on IDs using DatabaseHandler
-//        int userId = sessionManager.getUserID(); // Assuming this method retrieves user ID
-//        student = dbhandler.getStudentById(userId);
-//
-//        // Set TextViews with fetched data
-//        // Set TextViews with fetched data
-//        if (student != null) {
-//            editTextStudentId.setText(String.valueOf(student.getId()));
-//            editTextHostelId.setText(String.valueOf(student.getId()));
-//        }
-//        editTextRoomId = findViewById(R.id.editTextRoomId);
-//        editTextHostelId = findViewById(R.id.editTextHostelId);
-//        editTextStudentId = findViewById(R.id.editTextStudentId);
-//        editTextCheckInDate = findViewById(R.id.editTextCheckInDate);
-//        editTextCheckOutDate = findViewById(R.id.editTextCheckOutDate);
-//
-//        editTextTotalPrice = findViewById(R.id.editTextTotalPrice);
-//        buttonBook = findViewById(R.id.buttonBook);
 
-        recyclerView = findViewById(R.id.selectHostelRecycler);
+        recyclerView = findViewById(R.id.recyclerviewRoomsRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        hostelList = new ArrayList<>();
-
+        hostelist = new ArrayList<>();
 
         // Initialize database helper
         sessionManager = new SessionManager(getApplicationContext());
         databaseHelper = new DatabaseHandler(getApplicationContext(), sessionManager);
 
-        // Fetch data from the database and populate the hostelList
-        hostelList.addAll(databaseHelper.getAllHostels());
 
-        // Initialize RecyclerView adapter
-        adapter = new SelectHostelAdapter(hostelList, this);
+        // Fetch data from the database and populate the hostelList
+        hostelist.addAll(databaseHelper.getAllHostels());
+
+        adapter = new SelectHostelAdapter(hostelist , this);
 
         // Set RecyclerView layout manager and adapter
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-        // Check user role and set visibility accordingly
-//        if (sessionManager.isAdmin()) {
-//            editTextRoomId.setVisibility(View.VISIBLE);
-//            editTextHostelId.setVisibility(View.VISIBLE);
-//            editTextStudentId.setVisibility(View.VISIBLE);
-//            buttonBook.setVisibility(View.VISIBLE);
-//            //Get Student Hostel and Room
-//
-//        } else {
-//            editTextRoomId.setVisibility(View.GONE);
-//            editTextHostelId.setVisibility(View.GONE);
-//            editTextStudentId.setVisibility(View.GONE);
-//            buttonBook.setVisibility(View.VISIBLE);
-//        }
+        // Sample data for hostels
+        String[] hostelData = {
+                "Cozy Haven Hostel,Comfortable accommodation with friendly atmosphere and great amenities.,123 Main Street,New York,USA,150",
+                "Serene Oasis Hostel,Peaceful and tranquil hostel offering a relaxing stay with beautiful surroundings.,456 Park Avenue,Los Angeles,USA,120",
+                "Urban Adventure Hostel,Exciting urban experience with modern facilities and vibrant atmosphere.,789 Downtown Boulevard,Chicago,USA,180",
+                "Coastal Escape Hostel,Coastal retreat offering stunning ocean views and outdoor activities.,101 Oceanfront Drive,Miami,USA,160",
+                "Mountain View Hostel,Spectacular mountain vistas and cozy rooms for a memorable stay.,222 Alpine Road,Denver,USA,190",
+                "Cultural Hub Hostel,Immerse yourself in local culture and artsy ambiance at this unique hostel.,333 Artisan Lane,San Francisco,USA,170",
+                "Green Oasis Hostel,Eco-friendly accommodation surrounded by lush greenery and nature trails.,444 Eco Avenue,Seattle,USA,130",
+                "Lakeside Retreat Hostel,Tranquil lakeside setting with water activities and serene environment.,555 Lakefront Road,Minneapolis,USA,110",
+                "Historic Charm Hostel,Stay in a charming historic building with modern amenities and nostalgic vibes.,666 Heritage Lane,Boston,USA,100",
+                "Tropical Paradise Hostel,Tropical paradise offering beachfront accommodation and island adventures.,777 Seaside Avenue,Honolulu,USA,200"
+        };
 
+        // Process and add hostel data to the list
+        for (String hostelStr : hostelData) {
+            String[] hostelDetails = hostelStr.split(",");
+            Hostel hostel = new Hostel();
+            hostel.setHostelName(hostelDetails[0]);
+            hostel.setDescription(hostelDetails[1]);
+            hostel.setAddress(hostelDetails[2]);
+            hostel.setCity(hostelDetails[3]);
+            hostel.setCountry(hostelDetails[4]);
+            hostel.setCapacity(Integer.parseInt(hostelDetails[5]));
+            hostelist.add(hostel);
+        }
 
-        //buttonBook.setOnClickListener(v -> bookRoom());
+        // Notify the adapter that the data set has changed
+        adapter.notifyDataSetChanged();
     }
-//    private void bookRoom() {
-//        // Get values from EditText fields
-//        int roomId = Integer.parseInt(editTextRoomId.getText().toString().trim());
-//        int hostelId = Integer.parseInt(editTextHostelId.getText().toString().trim());
-//        int studentId = Integer.parseInt(editTextStudentId.getText().toString().trim());
-//        String checkInDate = editTextCheckInDate.getText().toString().trim();
-//        String checkOutDate = editTextCheckOutDate.getText().toString().trim();
-//        double totalPrice = Double.parseDouble(editTextTotalPrice.getText().toString().trim());
-//
-//        // Perform any additional validation or data processing here
-//
-//        // For demonstration purposes, display a toast with the booking details
-//        String message = "Room ID: " + roomId + "\nHostel ID: " + hostelId +
-//                "\nStudent ID: " + studentId + "\nCheck-in Date: " + checkInDate +
-//                "\nCheck-out Date: " + checkOutDate + "\nTotal Price: " + totalPrice;
-//        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-//    }
+
 }

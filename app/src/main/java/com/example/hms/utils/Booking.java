@@ -9,6 +9,7 @@ public class Booking {
     public static final String KEY_CHECK_IN_DATE = "check_in_date";
     public static final String KEY_CHECK_OUT_DATE = "check_out_date";
     public static final String KEY_TOTAL_PRICE = "total_price";
+    public static final String KEY_ROOM_TYPE = "room_type";
 
     private int id;
     private int roomId;
@@ -17,12 +18,14 @@ public class Booking {
     private String checkInDate;
     private String checkOutDate;
     private double totalPrice;
+    private String roomType; // Added roomType
 
     public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME +
             "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             KEY_ROOM_ID + " INTEGER," +
             KEY_HOSTEL_ID + " INTEGER," + // Added hostel_id to CREATE_TABLE
             KEY_STUDENT_ID + " INTEGER," +
+            KEY_ROOM_TYPE + " TEXT," + // Added roomType to CREATE_TABLE
             KEY_CHECK_IN_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP," +
             KEY_CHECK_OUT_DATE + " TEXT," +
             KEY_TOTAL_PRICE + " DECIMAL(10,2)," +
@@ -33,7 +36,7 @@ public class Booking {
     public Booking() {
     }
 
-    public Booking(int id, int roomId, int hostelId, int studentId, String checkInDate, String checkOutDate, double totalPrice) {
+    public Booking(int id, int roomId, int hostelId, int studentId, String checkInDate, String checkOutDate, double totalPrice, String roomType) {
         this.id = id;
         this.roomId = roomId;
         this.hostelId = hostelId;
@@ -41,6 +44,7 @@ public class Booking {
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
         this.totalPrice = totalPrice;
+        this.roomType = roomType;
     }
 
     // Getters and setters for private fields
@@ -99,5 +103,13 @@ public class Booking {
 
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public String getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(String roomType) {
+        this.roomType = roomType;
     }
 }

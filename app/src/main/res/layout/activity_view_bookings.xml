@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".views.ViewBookingsActivity">
+    <TextView
+
+        android:padding="16dp"
+        android:id="@+id/textViewBookingId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Booking ID:" />
+
+    <TextView
+        android:padding="16dp"
+        android:id="@+id/textViewStudentName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewBookingId"
+        android:text="Student Name:" />
+
+    <TextView
+        android:padding="16dp"
+        android:id="@+id/textViewCheckInDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewStudentName"
+        android:text="Check-in Date:" />
+
+    <TextView
+        android:padding="16dp"
+        android:id="@+id/textViewCheckOutDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewCheckInDate"
+        android:text="Check-out Date:" />
+
+    <TextView
+        android:padding="16dp"
+        android:id="@+id/textViewRoomType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewCheckOutDate"
+        android:text="Room Type:" />
+
+    <TextView
+        android:padding="16dp"
+        android:id="@+id/textViewTotalPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewRoomType"
+        android:text="Total Price:" />
+</LinearLayout>

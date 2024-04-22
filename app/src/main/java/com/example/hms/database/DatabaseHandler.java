@@ -71,80 +71,80 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 // Upload ALl Tables to  server
 
-    public void uploadDatabaseToServer() {
-        String url = "https://pmenergies.co.ke/android/upload_database.php"; // Replace with your server endpoint URL
-
-        // Get writable database
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        // Query to fetch all data from all tables
-        String selectQuery = "SELECT * FROM " + User.TABLE_NAME +
-                " UNION ALL SELECT * FROM " + Hostel.TABLE_NAME +
-                " UNION ALL SELECT * FROM " + Room.TABLE_NAME +
-                " UNION ALL SELECT * FROM " + Student.TABLE_NAME +
-                " UNION ALL SELECT * FROM " + Booking.TABLE_NAME+
-                " UNION ALL SELECT * FROM " + Notification.TABLE_NAME;
-
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        // Convert cursor data to JSON
-        JSONArray jsonArray = new JSONArray();
-        if (cursor.moveToFirst()) {
-            do {
-                int columns = cursor.getColumnCount();
-                JSONObject jsonObject = new JSONObject();
-                for (int i = 0; i < columns; i++) {
-                    String columnName = cursor.getColumnName(i);
-                    String columnValue = cursor.getString(i);
-                    try {
-                        jsonObject.put(columnName, columnValue);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                jsonArray.put(jsonObject);
-            } while (cursor.moveToNext());
-        }
-
-        // Close cursor and database
-        cursor.close();
-        db.close();
-
-        // Create a JSON object with the data array
-        JSONObject requestData = new JSONObject();
-        try {
-            requestData.put("data", jsonArray);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        // Create a new JsonObjectRequest using POST method
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, requestData,
-                response -> {
-                    // Handle the server response here
-                    try {
-                        String message = response.getString("message");
-                        int status = response.getInt("status");
-                        if (status == 0) {
-                            // Database uploaded successfully
-                            Log.d("UploadDatabase", message);
-                        } else {
-                            // Error uploading database
-                            Log.e("UploadDatabase", message);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                },
-                error -> {
-                    // Handle Volley errors here
-                    Log.e("UploadDatabase", "Volley Error: " + error.toString());
-                });
-
-        // Add the request to the RequestQueue
-        requestQueue.add(request);
-    }
-    //Add notifications
+//    public void uploadDatabaseToServer() {
+//        String url = "https://pmenergies.co.ke/android/upload_database.php"; // Replace with your server endpoint URL
+//
+//        // Get writable database
+//        SQLiteDatabase db = this.getWritableDatabase();
+//
+//        // Query to fetch all data from all tables
+//        String selectQuery = "SELECT * FROM " + User.TABLE_NAME +
+//                " UNION ALL SELECT * FROM " + Hostel.TABLE_NAME +
+//                " UNION ALL SELECT * FROM " + Room.TABLE_NAME +
+//                " UNION ALL SELECT * FROM " + Student.TABLE_NAME +
+//                " UNION ALL SELECT * FROM " + Booking.TABLE_NAME+
+//                " UNION ALL SELECT * FROM " + Notification.TABLE_NAME;
+//
+//        Cursor cursor = db.rawQuery(selectQuery, null);
+//
+//        // Convert cursor data to JSON
+//        JSONArray jsonArray = new JSONArray();
+//        if (cursor.moveToFirst()) {
+//            do {
+//                int columns = cursor.getColumnCount();
+//                JSONObject jsonObject = new JSONObject();
+//                for (int i = 0; i < columns; i++) {
+//                    String columnName = cursor.getColumnName(i);
+//                    String columnValue = cursor.getString(i);
+//                    try {
+//                        jsonObject.put(columnName, columnValue);
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//                jsonArray.put(jsonObject);
+//            } while (cursor.moveToNext());
+//        }
+//
+//        // Close cursor and database
+//        cursor.close();
+//        db.close();
+//
+//        // Create a JSON object with the data array
+//        JSONObject requestData = new JSONObject();
+//        try {
+//            requestData.put("data", jsonArray);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        // Create a new JsonObjectRequest using POST method
+//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, requestData,
+//                response -> {
+//                    // Handle the server response here
+//                    try {
+//                        String message = response.getString("message");
+//                        int status = response.getInt("status");
+//                        if (status == 0) {
+//                            // Database uploaded successfully
+//                            Log.d("UploadDatabase", message);
+//                        } else {
+//                            // Error uploading database
+//                            Log.e("UploadDatabase", message);
+//                        }
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                },
+//                error -> {
+//                    // Handle Volley errors here
+//                    Log.e("UploadDatabase", "Volley Error: " + error.toString());
+//                });
+//
+//        // Add the request to the RequestQueue
+//        requestQueue.add(request);
+//    }
+    // Add notifications
     public long addNotification(int hostelId, int senderId, int receiverId, String message) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -159,6 +159,34 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
 
         return id;
+    }
+
+    // Get all notifications
+    public List<Notification> getAllNotifications() {
+        List<Notification> notificationList = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + Notification.TABLE_NAME, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(Notification.KEY_ID));
+                @SuppressLint("Range") int hostelId = cursor.getInt(cursor.getColumnIndex(Notification.KEY_HOSTEL_ID));
+                @SuppressLint("Range") int senderId = cursor.getInt(cursor.getColumnIndex(Notification.KEY_SENDER_ID));
+                @SuppressLint("Range") int receiverId = cursor.getInt(cursor.getColumnIndex(Notification.KEY_RECEIVER_ID));
+                @SuppressLint("Range") String message = cursor.getString(cursor.getColumnIndex(Notification.KEY_MESSAGE));
+                @SuppressLint("Range") String sentAt = cursor.getString(cursor.getColumnIndex(Notification.KEY_SENT_AT));
+
+                Notification notification = new Notification(id, hostelId, senderId, receiverId, message, sentAt);
+                notificationList.add(notification);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return notificationList;
     }
 
     //Get notification
@@ -346,20 +374,26 @@ public long addHostel(String hostel_name, String description, String address,
     // Return the newly inserted hostel's ID
     return hostelId;
 }
-    public long addBooking( String check_in, String check_out,  String price) {
+    public long addBooking(String roomType,String hostelName,String studentName ,String check_in, String check_out,  double price) {
+
+
         // get writable database as we want to write data
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         // `id` and `timestamp` will be inserted automatically.
         // no need to add them
+
+        values.put(Booking.KEY_ROOM_TYPE, roomType);
+        values.put(Booking.KEY_HOSTEL_ID, hostelName);
+        values.put(Booking.KEY_STUDENT_ID, studentName);
         values.put(Booking.KEY_CHECK_IN_DATE, check_in);
         values.put(Booking.KEY_CHECK_OUT_DATE, check_out);
         //values.put(Booking.KEY_NUMBER_OF_STUDENTS, number_of_students);
         values.put(Booking.KEY_TOTAL_PRICE, price);
 
         // insert row
-        long id = db.insert(Student.TABLE_NAME, null, values);
+        long id = db.insert(Booking.TABLE_NAME, null, values);
 
         // close db connection
         db.close();
@@ -367,6 +401,42 @@ public long addHostel(String hostel_name, String description, String address,
         // return newly inserted row id
         return id;
     }
+
+    @SuppressLint("Range")
+    public List<Booking> getAllBookings() {
+        List<Booking> bookings = new ArrayList<>();
+
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + Booking.TABLE_NAME + " ORDER BY " +
+                Booking.KEY_ID + " DESC";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Booking booking = new Booking();
+                booking.setId(cursor.getInt(cursor.getColumnIndex(Booking.KEY_ID)));
+                booking.setRoomId(cursor.getInt(cursor.getColumnIndex(Booking.KEY_ROOM_ID)));
+                booking.setHostelId(cursor.getInt(cursor.getColumnIndex(Booking.KEY_HOSTEL_ID)));
+                booking.setStudentId(cursor.getInt(cursor.getColumnIndex(Booking.KEY_STUDENT_ID)));
+                booking.setCheckInDate(cursor.getString(cursor.getColumnIndex(Booking.KEY_CHECK_IN_DATE)));
+                booking.setCheckOutDate(cursor.getString(cursor.getColumnIndex(Booking.KEY_CHECK_OUT_DATE)));
+                booking.setTotalPrice(cursor.getDouble(cursor.getColumnIndex(Booking.KEY_TOTAL_PRICE)));
+                booking.setRoomType(cursor.getString(cursor.getColumnIndex(Booking.KEY_ROOM_TYPE)));
+
+                bookings.add(booking);
+            } while (cursor.moveToNext());
+        }
+
+        // close db connection
+        db.close();
+
+        // return bookings list
+        return bookings;
+    }
+
 
     public Student getStudent(long id) {
         // get readable database as we are not inserting anything

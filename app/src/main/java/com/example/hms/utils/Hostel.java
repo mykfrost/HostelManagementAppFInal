@@ -171,9 +171,4 @@ public class Hostel {
         this.fullName = fullName;
     }
 
-    public int getNumberOfRooms() {
-        // Assuming id is the hostel_id, you can modify this logic based on your actual implementation
-        Room roomInstance = new Room();
-        return roomInstance.getNumberOfRoomsInHostel(this.id);
-    }
 }

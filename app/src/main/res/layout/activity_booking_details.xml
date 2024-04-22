@@ -3,14 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:padding="16dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".views.ViewRoomsActivity">
-
+    android:padding="16dp"
+    tools:context=".views.BookingDetailsActivity">
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerviewRoomsRecycler"
+        android:id="@+id/recyclerBookings"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
 </LinearLayout>

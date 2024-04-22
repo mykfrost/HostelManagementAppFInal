@@ -7,9 +7,9 @@ import com.example.hms.database.DatabaseHandler;
 public class Room {
     private DatabaseHandler databaseHandler;
 
-    public Room(DatabaseHandler databaseHandler) {
-        this.databaseHandler = databaseHandler;
-    }
+    //public Room(DatabaseHandler databaseHandler) {
+//        this.databaseHandler = databaseHandler;
+//    }
     // Hostels table column names
     // Room table column names
     public static final String TABLE_NAME = "room";
@@ -147,9 +147,9 @@ public class Room {
         this.booking_date = booking_date;
     }
 
-    public int getNumberOfRoomsInHostel(int hostel_id) {
-        return databaseHandler.getHostelRoomsCount(hostel_id);
-    }
+//    public int getNumberOfRoomsInHostel(int hostel_id) {
+//        return databaseHandler.getHostelRoomsCount(hostel_id);
+//    }
 
 
 }
