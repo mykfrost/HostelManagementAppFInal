@@ -660,24 +660,23 @@ public void deleteRoom(Room room) {
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
-
         // Loop through rows and create Room objects
         if (cursor.moveToFirst()) {
             do {
                 @SuppressLint("Range") Room room = new Room(
+                        cursor.getInt(cursor.getColumnIndex(Room.KEY_ID)),
                         cursor.getInt(cursor.getColumnIndex(Room.KEY_HOSTEL_ID)),
-                        cursor.getInt(cursor.getColumnIndex(Room.KEY_HOSTEL_NAME)),
+                        cursor.getString(cursor.getColumnIndex(Room.KEY_HOSTEL_NAME)),
                         cursor.getString(cursor.getColumnIndex(Room.KEY_ROOM_TYPE)),
                         cursor.getString(cursor.getColumnIndex(Room.KEY_CAPACITY)),
                         cursor.getInt(cursor.getColumnIndex(Room.KEY_PRICE)),
                         cursor.getString(cursor.getColumnIndex(Room.KEY_DESCRIPTION)),
-                        cursor.getString(cursor.getColumnIndex(Room.KEY_STATUS))
-
+                        cursor.getString(cursor.getColumnIndex(Room.KEY_STATUS)),
+                        cursor.getString(cursor.getColumnIndex(Room.KEY_BOOKING_DATE))
                 );
                 rooms.add(room);
             } while (cursor.moveToNext());
         }
-
         // Close cursor and database connection
         cursor.close();
         db.close();

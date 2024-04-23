@@ -17,33 +17,33 @@ import com.example.hms.adapters.RoomsAdapter;
 import com.example.hms.database.DatabaseHandler;
 import com.example.hms.utils.Room;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewBookRoomActivity extends AppCompatActivity {
-    RecyclerView recyclerView;
+public class StartBookingActivity extends AppCompatActivity {
+    SessionManager sessionManager ;
+    RecyclerView recyclerView ;
+
     private RoomsAdapter adapter;
     private List<Room> roomslist;
-    SessionManager sessionManager;
     DatabaseHandler databaseHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_new_book_room);
+        setContentView(R.layout.activity_start_booking);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
         databaseHelper = new DatabaseHandler(this, sessionManager);
-        recyclerView = findViewById(R.id.recyclerBookRoom);
-       // recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView = findViewById(R.id.recyclerstartbooking);
+        // recyclerView.setLayoutManager(new LinearLayoutManager(this));
         roomslist = new ArrayList<>();
         // Fetch data from the database and populate the hostelList
-       // List<Room> rooms = databaseHelper.getAllRooms();
-       // roomslist.addAll(rooms);
+        // List<Room> rooms = databaseHelper.getAllRooms();
+        // roomslist.addAll(rooms);
         try {
             // Fetch data from the database and populate the roomslist
             List<Room> rooms = databaseHelper.getAllRooms();
@@ -59,12 +59,5 @@ public class NewBookRoomActivity extends AppCompatActivity {
             // Handle any exceptions
             Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-        // Initialize RecyclerView adapter
-    //    adapter = new RoomsAdapter(roomslist, this);
-
-        // Set RecyclerView layout manager and adapter
-       // recyclerView.setLayoutManager(new LinearLayoutManager(this));
-       // recyclerView.setAdapter(adapter);
     }
-
 }

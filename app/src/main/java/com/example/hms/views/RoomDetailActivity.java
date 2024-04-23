@@ -34,6 +34,7 @@ public class RoomDetailActivity extends AppCompatActivity {
    SessionManager sessionManager ;
    int hostelid ,studentid, roomId;
    EditText checkout;
+
    TextView  roomHostelName ,roomTypeTextView ,  statusTextView, textviewdescription ,capacityTextView,totalPriceTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,9 @@ public class RoomDetailActivity extends AppCompatActivity {
              capacityTextView = findViewById(R.id.capacity_text_view);
              totalPriceTextView = findViewById(R.id.total_price_text_view);
             textviewdescription = findViewById(R.id.description);
-                    book = findViewById(R.id.newButtonBook);
+            checkout = findViewById(R.id.checkOut_date);
+            book = findViewById(R.id.newButtonBook);
+
 
             roomHostelName.setText("Room ID: " + hostelName);
             textviewdescription.setText("Desc: "+ description);
@@ -149,7 +152,9 @@ public class RoomDetailActivity extends AppCompatActivity {
         String capacity = capacityTextView.getText().toString().trim();
         String price = totalPriceTextView.toString().trim();
 
+        double parsedPrice = Double.parseDouble(price);
+
       //  List<Room> rooms = dbhandler.getAllRooms();
-        long id = dbhandler.addBooking(roomId,hostelid,hostelname,studentid ,studentname ,roomtype , checkin , checkOutDate, Double.parseDouble(price));
+        long id = dbhandler.addBooking(roomId,hostelid,hostelname,studentid ,studentname ,roomtype , checkin , checkOutDate, parsedPrice);
     }
 }

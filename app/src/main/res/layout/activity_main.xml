@@ -75,7 +75,7 @@
         android:id="@+id/btnBooking"
         android:layout_width="200sp"
         android:layout_height="wrap_content"
-        android:text="Booking" />
+        android:text="Make a Booking" />
     <Button
         android:layout_margin="10sp"
         android:layout_gravity="center_horizontal"

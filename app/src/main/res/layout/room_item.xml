@@ -8,6 +8,7 @@
     android:padding="16dp">
 
     <TextView
+        android:layout_margin="10dp"
         android:id="@+id/item_txtRoomType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,13 +18,24 @@
         android:layout_marginBottom="8dp"
         android:hint="Room Type" /> <!-- Hint for Room Type -->
     <TextView
+        android:layout_margin="10dp"
+        android:id="@+id/item_hostel_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="8dp"
+        android:hint="Hostel Name" />
+
+    <TextView
+        android:layout_margin="10dp"
         android:id="@+id/item_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
         android:layout_marginBottom="8dp"
-        android:hint="Room Details" />
+        android:hint="Description" />
     <TextView
+        android:layout_margin="10dp"
         android:id="@+id/item_textCapacity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,6 +44,7 @@
         android:layout_marginBottom="8dp"
         android:hint="Capacity" /> <!-- Hint for Capacity -->
     <TextView
+        android:layout_margin="10dp"
         android:id="@+id/item_textStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,11 +53,18 @@
         android:layout_marginBottom="8dp"
         android:hint="Status" />
     <TextView
+        android:layout_margin="10dp"
         android:id="@+id/item_text_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:textColor="@android:color/darker_gray"
         android:hint="Price" /> <!-- Hint for Price -->
-
+<!--<Button-->
+<!--    android:id="@+id/bookthisroom"-->
+<!--    android:layout_gravity="center_horizontal"-->
+<!--    android:layout_margin="10dp"-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:text="Book This Room"-->
+<!--    android:layout_height="match_parent"/>-->
 </LinearLayout>

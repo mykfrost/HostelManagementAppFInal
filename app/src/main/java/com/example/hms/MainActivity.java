@@ -19,6 +19,7 @@ import com.example.hms.views.BookingDetailsActivity;
 import com.example.hms.views.CreateNotification;
 import com.example.hms.views.HostelsActivity;
 import com.example.hms.views.NewBookRoomActivity;
+import com.example.hms.views.StartBookingActivity;
 import com.example.hms.views.StudentManager;
 import com.example.hms.views.SelectHostelActivity;
 import androidx.work.ExistingPeriodicWorkPolicy;
@@ -108,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         btnBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent booking = new Intent(getApplicationContext(), SelectHostelActivity.class);
+                Intent booking = new Intent(getApplicationContext(), StartBookingActivity.class);
                 startActivity(booking);
             }
         });
