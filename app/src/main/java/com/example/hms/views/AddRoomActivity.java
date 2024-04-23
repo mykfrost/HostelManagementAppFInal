@@ -2,6 +2,7 @@ package com.example.hms.views;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,22 +28,23 @@ import com.example.hms.SessionManager;
 import com.example.hms.adapters.HostelAdapter;
 import com.example.hms.database.DatabaseHandler;
 import com.example.hms.utils.Hostel;
+import com.example.hms.utils.Room;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AddRoomActivity extends AppCompatActivity {
-    private Spinner spinnerRoomType, spinnerHostels;
+    private Spinner spinnerRoomType, spinnerStatus;
     private EditText editTextCapacity, editTextPrice, editTextDescription;
     private Button buttonAddRoom;
     TextView tvHostels;
     private ArrayAdapter<String> hostelAdapter;
-    private DatabaseHandler databaseHandler;
+    private DatabaseHandler dbHandler;
     private SessionManager sessionManager;
     private List<Hostel> hostelsList;
     private double[] roomPrices;
-    int  hostelId;
-    private String[] roomTypes, hostelNames;
+    int  hostelId , roomId;
+    private String[] roomTypes , status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public class AddRoomActivity extends AppCompatActivity {
 
 
         spinnerRoomType = findViewById(R.id.spinnerRoomType);
+        spinnerStatus = findViewById(R.id.spinnerStatus);
         tvHostels = findViewById(R.id.selectedHostels);
         editTextCapacity = findViewById(R.id.editTextCapacity);
         editTextPrice = findViewById(R.id.editTextPrice);
@@ -68,24 +71,18 @@ public class AddRoomActivity extends AppCompatActivity {
         roomsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerRoomType.setAdapter(roomsAdapter);
 
-        databaseHandler = new DatabaseHandler(this, sessionManager);
+        status = getResources().getStringArray(R.array.status);
+        ArrayAdapter<String> statusAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, status);
+        roomsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerStatus.setAdapter(statusAdapter);
+        dbHandler = new DatabaseHandler(this, sessionManager);
         sessionManager = new SessionManager(this);
 
-//        // Fetch hostels from the database
-//        hostelsList = databaseHandler.getAllHostels();
-//        if (hostelsList != null && !hostelsList.isEmpty()) {
-//            List<String> hostelNames = new ArrayList<>();
-//            for (Hostel hostel : hostelsList) {
-//                hostelNames.add(hostel.getHostelName());
-//            }
-//            hostelAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, hostelNames);
-//            hostelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//            spinnerHostels.setAdapter(hostelAdapter);
-        //    }
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
              hostelId = extras.getInt("hostel_id", -1); // Default value -1 if "hostel_id" is not found
+
             String hostelName = extras.getString("hostel_name");
 
             if (hostelId != -1 && hostelName != null) {
@@ -118,6 +115,20 @@ public class AddRoomActivity extends AppCompatActivity {
                 }
             });
 
+        // Set a listener for room type selection to update the price field
+        spinnerStatus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String roomstatus = status[position];
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing
+            }
+        });
+
             buttonAddRoom.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -127,28 +138,45 @@ public class AddRoomActivity extends AppCompatActivity {
 
     }
         private void addRoomToDatabase (int hostelId) {
-            String selectedHostel = tvHostels.getText().toString();
+           String hostels  = tvHostels.getText().toString().trim();
             String roomType = spinnerRoomType.getSelectedItem().toString();
-            String capacity = editTextCapacity.getText().toString().trim();
-            String price = editTextPrice.getText().toString().trim();
-            String description = editTextDescription.getText().toString().trim();
+            String status = spinnerStatus.getSelectedItem().toString();
+            int capacity = Integer.parseInt(editTextCapacity.getText().toString());
+            double price = Double.parseDouble(editTextPrice.getText().toString());
+            String description = editTextDescription.getText().toString();
 
-            if (selectedHostel.isEmpty() || roomType.isEmpty() || capacity.isEmpty() || price.isEmpty() || description.isEmpty()) {
-                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
-                return;
-            }
 
-           // int hostelId = findHostelId(selectedHostel);
+             // Create a Room object with the input values
+            Room room = new Room();
+            room.setHostel_name(hostels);
+            room.setHostel_id(hostelId);
+            room.setRoom_type(roomType);
+            room.setStatus(status);
+            room.setCapacity(String.valueOf(capacity));
+            room.setPrice((int) price);
+            room.setDescription(description);
 
-            long roomId = databaseHandler.addRoom(roomType, capacity, price, description, hostelId);
+
+            // Call the database handler method to add the room
+            long roomId = dbHandler.addRoom(room);
+           // int hostelid = dbHandler.getHostelById()
 
             if (roomId != -1) {
-                Toast.makeText(this, "Room added successfully with ID: " + roomId, Toast.LENGTH_SHORT).show();
-                clearInputFields();
+                // Room added successfully
+                Toast.makeText(this, "Room added successfully", Toast.LENGTH_SHORT).show();
+
+                // Clear input fields
+                spinnerRoomType.setSelection(0);
+                editTextCapacity.setText("");
+                editTextPrice.setText("");
+                editTextDescription.setText("");
             } else {
+                // Error adding room
                 Toast.makeText(this, "Failed to add room", Toast.LENGTH_SHORT).show();
             }
         }
+
+
 
 
         private void clearInputFields () {

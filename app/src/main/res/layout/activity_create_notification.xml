@@ -4,59 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:padding="16dp"
+    android:background="@color/colorAccent"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".views.CreateNotification">
-
-    <TextView
-        android:id="@+id/textViewHostelId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hostel ID:" />
-
-    <EditText
-        android:id="@+id/editTextHostelId"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textViewHostelId"
-        android:inputType="number" />
-
-    <TextView
-        android:id="@+id/textViewSenderId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/editTextHostelId"
-        android:text="Sender ID:" />
-
-    <EditText
-        android:id="@+id/editTextSenderId"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textViewSenderId"
-        android:inputType="number" />
-
-    <TextView
-        android:id="@+id/textViewReceiverId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/editTextSenderId"
-        android:text="Receiver ID:" />
-
-    <EditText
-        android:id="@+id/editTextReceiverId"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textViewReceiverId"
-        android:inputType="number" />
 
     <TextView
         android:id="@+id/textViewMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editTextReceiverId"
         android:text="Message:" />
 
     <EditText
+        android:padding="10dp"
         android:id="@+id/editTextMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,19 +24,37 @@
         android:inputType="textMultiLine"
         android:minLines="5" />
 
-    <Button
-        android:id="@+id/buttonViewNotifications"
-        android:layout_width="wrap_content"
+    <EditText
+        android:padding="10dp"
+        android:id="@+id/editTextReceiverId"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/editTextMessage"
-        android:layout_alignParentEnd="true"
-        android:text="View Notification" />
-    <Button
-        android:id="@+id/buttonSendNotification"
+        android:hint="Receiver ID"
+        android:inputType="number" />
+
+    <TextView
+        android:padding="10dp"
+        android:id="@+id/textViewSenderId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/buttonViewNotifications"
-        android:layout_below="@id/editTextMessage"
-        android:layout_alignParentStart="true"
-        android:text="Send Notification" />
+        android:layout_below="@id/editTextReceiverId"
+        android:text="Sender ID: " />
+
+    <Button
+
+    android:padding="10dp"
+    android:id="@+id/buttonSendFeedback"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/textViewSenderId"
+    android:text="Send Feedback" />
+    <Button
+        android:padding="10dp"
+        android:id="@+id/buttonViewFeedback"
+        android:layout_width="wrap_content"
+      android:layout_toRightOf="@+id/buttonSendFeedback"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewSenderId"
+        android:text="View Feedback" />
 </RelativeLayout>

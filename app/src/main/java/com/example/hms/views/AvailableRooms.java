@@ -1,9 +1,6 @@
 package com.example.hms.views;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,56 +12,45 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hms.R;
 import com.example.hms.SessionManager;
-import com.example.hms.adapters.BookingsAdapter;
-import com.example.hms.adapters.SelectHostelAdapter;
-import com.example.hms.adapters.ViewBookingsAdapter;
+import com.example.hms.adapters.HostelAdapter;
+import com.example.hms.adapters.RoomsAdapter;
 import com.example.hms.database.DatabaseHandler;
-import com.example.hms.utils.Booking;
 import com.example.hms.utils.Hostel;
+import com.example.hms.utils.Room;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewBookingsActivity extends AppCompatActivity {
-
+public class AvailableRooms extends AppCompatActivity {
+// listview activity here
+RecyclerView recyclerView ;
     SessionManager sessionManager ;
-    private RecyclerView recyclerView;
 
+    private RoomsAdapter adapter;
+    private List<Room> roomslist;
     DatabaseHandler databaseHelper;
-    private BookingsAdapter adapter;
-    private List<Booking> bookingList;
-    DatabaseHandler dbhandler;
-    private TextView textViewBookingId, textViewStudentName, textViewCheckInDate,
-            textViewCheckOutDate, textViewRoomType, textViewTotalPrice;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_view_bookings);
+        setContentView(R.layout.activity_available_rooms);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-
-        recyclerView = findViewById(R.id.recyclerBookings);
+        recyclerView = findViewById(R.id.recyclerAvailableRooms);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        bookingList = new ArrayList<>();
-
-        // Initialize database helper
-        sessionManager = new SessionManager(getApplicationContext());
-        databaseHelper = new DatabaseHandler(getApplicationContext(), sessionManager);
-
-
+        roomslist = new ArrayList<>();
         // Fetch data from the database and populate the hostelList
-        bookingList.addAll(databaseHelper.getAllBookings());
+        roomslist.addAll(databaseHelper.getAllRooms());
 
-        adapter = new BookingsAdapter(bookingList , this);
+        // Initialize RecyclerView adapter
+        adapter = new RoomsAdapter(roomslist, this);
 
         // Set RecyclerView layout manager and adapter
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-
     }
 }

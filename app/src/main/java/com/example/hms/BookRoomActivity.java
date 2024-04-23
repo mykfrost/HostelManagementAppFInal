@@ -20,6 +20,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.hms.database.DatabaseHandler;
+import com.example.hms.utils.Room;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,6 +36,9 @@ public class BookRoomActivity extends AppCompatActivity {
     EditText  editTextPrice , editTextCheckInDate, editTextCheckOutDate;
     private Spinner spinnerRoomType;
     private SimpleDateFormat dateFormatter;
+
+    public int hostel_id ;
+    public int roomid;
     Button buttonBookRoom;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,13 +66,19 @@ public class BookRoomActivity extends AppCompatActivity {
 
         // Set current date to check-in date if not selected
         editTextCheckInDate.setText(dateFormatter.format(Calendar.getInstance().getTime()));
-
         // Get intent extras
         Intent intent = getIntent();
         if (intent != null) {
-            String hostelName = intent.getStringExtra("name");
+            String hostelName = intent.getStringExtra("hostel_name");
+           hostel_id = intent.getIntExtra("hostel_id",-1);
+
+//           String roomtype = intent.getStringExtra("room_type");
+//           String status = intent.getStringExtra("status");
+//           String capacity = intent.getStringExtra("capacity");
+//           String price = intent.getStringExtra("total_price");
             // Set text to TextViews
             hostelNameTextView.setText(hostelName);
+
         }
         // Set a listener for room type selection to update the price field
         spinnerRoomType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -76,7 +86,6 @@ public class BookRoomActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedRoomType = roomTypes[position];
                 double price = calculatePrice(selectedRoomType);
-                editTextPrice.setText(String.valueOf(price));
             }
 
             @Override
@@ -117,15 +126,15 @@ public class BookRoomActivity extends AppCompatActivity {
         // For demonstration, let's assume fixed prices for each room type
         switch (roomType) {
             case "Dorm Room":
-                return 50.0;
+                return 250.0;
             case "Private Room":
-                return 100.0;
+                return 300.0;
             case "Ensuite Room":
-                return 150.0;
+                return 450.0;
             case "Female Dorm":
-                return 60.0;
+                return 360.0;
             case "Pod Dorm":
-                return 70.0;
+                return 170.0;
             case "Family Room":
                 return 200.0;
             default:
@@ -133,23 +142,6 @@ public class BookRoomActivity extends AppCompatActivity {
         }
     }
 
-//    private void showDatePickerDialog() {
-//        final Calendar newCalendar = Calendar.getInstance();
-//
-//        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-//            @Override
-//            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-//                Calendar selectedDate = Calendar.getInstance();
-//                selectedDate.set(year, monthOfYear, dayOfMonth);
-//
-//                String selectedDateString = dateFormatter.format(selectedDate.getTime());
-//                editTextCheckOutDate.setText(selectedDateString);
-//            }
-//        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-//
-//        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
-//        datePickerDialog.show();
-//    }
 
 
     private void showDatePickerDialog(final EditText targetEditText) {
@@ -173,7 +165,8 @@ public class BookRoomActivity extends AppCompatActivity {
     private void bookRoom() {
         // Get the selected hostel name from the TextView
         String hostelName = hostelNameTextView.getText().toString();
-
+       Room room = new Room();
+        roomid = room.getId();
         // Get the selected room type from the Spinner
         String roomType = spinnerRoomType.getSelectedItem().toString();
 
@@ -184,13 +177,15 @@ public class BookRoomActivity extends AppCompatActivity {
         String checkOutDate = editTextCheckOutDate.getText().toString();
 
         // Get the total price from the EditText
+       // double totalPrice = Double.parseDouble(editTextPrice.getText().toString());
         double totalPrice = Double.parseDouble(editTextPrice.getText().toString());
 
         // Fetch the student's name from the database
-        String studentName = fetchStudentName(); // Implement this method
+        int studentID = fetchStudenID(); // Implement this method
+        String studentName = fetchStudenName();
 
         // Now insert the data into the bookings table
-        long bookingId = databaseHandler.addBooking(roomType, hostelName, studentName, checkInDate, checkOutDate, totalPrice);
+        long bookingId = databaseHandler.addBooking(roomid, hostel_id,hostelName,studentID ,studentName, checkInDate, checkOutDate,checkOutDate, totalPrice);
 
         if (bookingId != -1) {
             // Booking added successfully
@@ -209,14 +204,25 @@ public class BookRoomActivity extends AppCompatActivity {
     }
 
 
-    private String fetchStudentName() {
+    private int fetchStudenID() {
+        // Implement the logic to fetch the student's name from the database
+        // For demonstration, let's assume the name is retrieved from a SessionManager or similar class
+        SessionManager sessionManager = new SessionManager(this);
+        if (sessionManager.isLoggedIn()) {
+            return sessionManager.getUserID();
+        } else {
+            return 0; // Default name if not logged in
+        }
+    }
+
+    private String fetchStudenName() {
         // Implement the logic to fetch the student's name from the database
         // For demonstration, let's assume the name is retrieved from a SessionManager or similar class
         SessionManager sessionManager = new SessionManager(this);
         if (sessionManager.isLoggedIn()) {
             return sessionManager.getFullName();
         } else {
-            return "Unknown"; // Default name if not logged in
+            return "Unknown User"; // Default name if not logged in
         }
     }
 }

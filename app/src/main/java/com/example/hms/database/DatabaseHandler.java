@@ -7,11 +7,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
+
 import androidx.annotation.Nullable;
-import com.android.volley.Request;
+
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.hms.SessionManager;
 import com.example.hms.Singleton.VolleySingleton;
 import com.example.hms.utils.Booking;
@@ -21,9 +20,6 @@ import com.example.hms.utils.Room;
 import com.example.hms.utils.Student;
 import com.example.hms.utils.User;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +50,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(Room.CREATE_TABLE);
         db.execSQL(Student.CREATE_TABLE);
         db.execSQL(Booking.CREATE_TABLE);
+        db.execSQL(Notification.CREATE_TABLE);
     }
 
     @Override
@@ -144,15 +141,67 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 //        // Add the request to the RequestQueue
 //        requestQueue.add(request);
 //    }
-    // Add notifications
-    public long addNotification(int hostelId, int senderId, int receiverId, String message) {
-        SQLiteDatabase db = this.getWritableDatabase();
 
+    // Get User from user database
+    @SuppressLint("Range")
+    public void getUserlById(User userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + User.TABLE_NAME + " WHERE " +
+                User.KEY_ID + " = ?";
+
+        Cursor cursor = db.rawQuery(selectQuery, new String[]{String.valueOf(userId)});
+
+        User user = null;
+        if (cursor.moveToFirst()) {
+            user = new User();
+            user.setId(cursor.getInt(cursor.getColumnIndex(User.KEY_ID)));
+        }
+
+        cursor.close();
+        db.close();
+    }
+
+    // Add notifications
+//    public long addNotification(int hostelId, int senderId, int receiverId, String message) {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        String selectQuery = "SELECT * FROM " + Notification.TABLE_NAME + " WHERE " +
+//                Notification.KEY_ID + " = ?";
+//
+//        Cursor cursor = db.rawQuery(selectQuery, new String[]{String.valueOf(message)});
+//        ContentValues values = new ContentValues();
+//        values.put(Notification.KEY_HOSTEL_ID, hostelId);
+//        values.put(Notification.KEY_SENDER_ID, senderId);
+//        values.put(Notification.KEY_RECEIVER_ID, receiverId);
+//        values.put(Notification.KEY_MESSAGE, message);
+//
+//        long id = db.insert(Notification.TABLE_NAME, null, values);
+//
+//        db.close();
+//
+//        return id;
+//    }
+    public long addNotification(Notification notification) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery = "SELECT * FROM " + Notification.TABLE_NAME + " WHERE " +
+                Notification.KEY_MESSAGE + " = ? AND " +
+                Notification.KEY_SENDER_ID + " = ?";
+
+        Cursor cursor = db.rawQuery(selectQuery, new String[]{notification.getMessage(), String.valueOf(notification.getSenderId())});
+
+        // Check if a notification with the same message and sender ID exists
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.close();
+            // Handle the scenario where the notification already exists
+            return -1; // You can return a specific value to indicate the notification already exists
+        }
+
+        // If the notification doesn't exist, proceed with inserting a new one
         ContentValues values = new ContentValues();
-        values.put(Notification.KEY_HOSTEL_ID, hostelId);
-        values.put(Notification.KEY_SENDER_ID, senderId);
-        values.put(Notification.KEY_RECEIVER_ID, receiverId);
-        values.put(Notification.KEY_MESSAGE, message);
+       // values.put(Notification.KEY_HOSTEL_ID, hostelId);
+        values.put(Notification.KEY_SENDER_ID, notification.getSenderId());
+        values.put(Notification.KEY_RECEIVER_ID,notification.getReceiverId());
+        values.put(Notification.KEY_MESSAGE, notification.getMessage());
 
         long id = db.insert(Notification.TABLE_NAME, null, values);
 
@@ -160,7 +209,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         return id;
     }
-
     // Get all notifications
     public List<Notification> getAllNotifications() {
         List<Notification> notificationList = new ArrayList<>();
@@ -172,13 +220,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(Notification.KEY_ID));
-                @SuppressLint("Range") int hostelId = cursor.getInt(cursor.getColumnIndex(Notification.KEY_HOSTEL_ID));
+               // int hostelId = cursor.getInt(cursor.getColumnIndex(Notification.KEY_HOSTEL_ID));
                 @SuppressLint("Range") int senderId = cursor.getInt(cursor.getColumnIndex(Notification.KEY_SENDER_ID));
                 @SuppressLint("Range") int receiverId = cursor.getInt(cursor.getColumnIndex(Notification.KEY_RECEIVER_ID));
                 @SuppressLint("Range") String message = cursor.getString(cursor.getColumnIndex(Notification.KEY_MESSAGE));
                 @SuppressLint("Range") String sentAt = cursor.getString(cursor.getColumnIndex(Notification.KEY_SENT_AT));
 
-                Notification notification = new Notification(id, hostelId, senderId, receiverId, message, sentAt);
+                Notification notification = new Notification(id,  senderId, receiverId, message, sentAt);
                 notificationList.add(notification);
             } while (cursor.moveToNext());
         }
@@ -189,13 +237,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return notificationList;
     }
 
+
     //Get notification
     @SuppressLint("Range")
     public Notification getNotification(long id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(Notification.TABLE_NAME,
-                new String[]{Notification.KEY_ID, Notification.KEY_HOSTEL_ID, Notification.KEY_SENDER_ID, Notification.KEY_RECEIVER_ID, Notification.KEY_MESSAGE},
+                new String[]{Notification.KEY_ID,
+                        Notification.KEY_HOSTEL_ID,
+                        Notification.KEY_SENDER_ID,
+                        Notification.KEY_RECEIVER_ID,
+                        Notification.KEY_MESSAGE},
                 Notification.KEY_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -301,52 +354,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
 
-
-    public long addRoom(  String room_type, String capacity, String price, String description, int hostel_id ) {
-        // get writable database as we want to write data
+    public long addRoom(Room room) {
         SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues values = new ContentValues();
-        // `id` and `timestamp` will be inserted automatically.
-        // no need to add them
-        values.put(Room.KEY_ROOM_TYPE, room_type);
-        values.put(Room.KEY_CAPACITY, capacity);
-        values.put(Room.KEY_PRICE, price);
-        values.put(Room.KEY_DESCRIPTION, description);
-        values.put(Room.KEY_HOSTEL_ID, hostel_id);
 
-        // insert row
-        long id = db.insert(Room.TABLE_NAME, null, values);
+        values.put(Room.KEY_ROOM_TYPE, room.getRoom_type());
+        values.put(Room.KEY_STATUS , room.getStatus());
+       values.put(Room.KEY_CAPACITY, room.getCapacity());
+      values.put(Room.KEY_PRICE, room.getPrice());
+      values.put(Room.KEY_DESCRIPTION, room.getDescription());
+       values.put(Room.KEY_HOSTEL_ID, room.getHostel_id());
 
-        // close db connection
+        long roomId = db.insert(Room.TABLE_NAME, null, values);
         db.close();
-
-        // return newly inserted row id
-        return id;
+        return roomId;
     }
 
-//    public long addHostel(String hostel_name, String description, String address, String city, String country,String capacity) {
-//        // get writable database as we want to write data
-//        SQLiteDatabase db = this.getWritableDatabase();
-//
-//        ContentValues values = new ContentValues();
-//        // `id` and `timestamp` will be inserted automatically.
-//        // no need to add them
-//
-//        values.put(Hostel.KEY_NAME, hostel_name);
-//        values.put(Hostel.KEY_DESCRIPTION, description);
-//        values.put(Hostel.KEY_ADDRESS, address);
-//        values.put(Hostel.KEY_CITY, city);
-//        values.put(Hostel.KEY_COUNTRY, country);
-//        values.put(Hostel.KEY_CAPACITY, capacity);
-//
-//        // insert row
-//        long id = db.insert(Hostel.TABLE_NAME, null, values);
-//
-//        // close db connection
-//        db.close();
-//        return id;
-//    }
 public long addHostel(String hostel_name, String description, String address,
                       String city, String country, String fullName,boolean isAdmin , int capacity) {
 
@@ -374,7 +397,10 @@ public long addHostel(String hostel_name, String description, String address,
     // Return the newly inserted hostel's ID
     return hostelId;
 }
-    public long addBooking(String roomType,String hostelName,String studentName ,String check_in, String check_out,  double price) {
+    public long addBooking(int room_id , int hostel_id , String hostel_name , int student_id ,
+                           String studentName, String roomType ,
+
+                           String check_in,String check_out , double price) {
 
 
         // get writable database as we want to write data
@@ -383,13 +409,14 @@ public long addHostel(String hostel_name, String description, String address,
         ContentValues values = new ContentValues();
         // `id` and `timestamp` will be inserted automatically.
         // no need to add them
-
+        values.put(Booking.KEY_ROOM_ID , room_id);
+        values.put(Booking.KEY_HOSTEL_ID, hostel_id);
+        values.put(Booking.KEY_HOSTEL_NAME,hostel_name);
+        values.put(Booking.KEY_STUDENT_ID, student_id);
+        values.put(Booking.KEY_STUDENT_NAME,studentName);
         values.put(Booking.KEY_ROOM_TYPE, roomType);
-        values.put(Booking.KEY_HOSTEL_ID, hostelName);
-        values.put(Booking.KEY_STUDENT_ID, studentName);
         values.put(Booking.KEY_CHECK_IN_DATE, check_in);
         values.put(Booking.KEY_CHECK_OUT_DATE, check_out);
-        //values.put(Booking.KEY_NUMBER_OF_STUDENTS, number_of_students);
         values.put(Booking.KEY_TOTAL_PRICE, price);
 
         // insert row
@@ -525,14 +552,12 @@ public long addHostel(String hostel_name, String description, String address,
             @SuppressLint("Range") Room room = new Room(
                     cursor.getInt(cursor.getColumnIndex(Room.KEY_ID)),
                     cursor.getInt(cursor.getColumnIndex(Room.KEY_HOSTEL_ID)),
-                    cursor.getInt(cursor.getColumnIndex(Room.KEY_STUDENT_ID)),
                     cursor.getString(cursor.getColumnIndex(Room.KEY_ROOM_TYPE)),
                     cursor.getString(cursor.getColumnIndex(Room.KEY_CAPACITY)),
                     cursor.getInt(cursor.getColumnIndex(Room.KEY_PRICE)),
                     cursor.getString(cursor.getColumnIndex(Room.KEY_DESCRIPTION)),
-                    cursor.getString(cursor.getColumnIndex(Room.KEY_STATUS)),
-                    cursor.getDouble(cursor.getColumnIndex(Room.KEY_PRICE_PER_NIGHT)),
-                    cursor.getString(cursor.getColumnIndex(Room.KEY_BOOKING_DATE))
+                    cursor.getString(cursor.getColumnIndex(Room.KEY_STATUS))
+
             );
 
             cursor.close();
@@ -618,13 +643,6 @@ public void deleteRoom(Room room) {
         if (cursor.moveToFirst()) {
             hostel = new Hostel();
             hostel.setId(cursor.getInt(cursor.getColumnIndex(Hostel.KEY_ID)));
-            hostel.setStudentId(cursor.getInt(cursor.getColumnIndex(Hostel.KEY_STUDENT_ID)));
-            hostel.setHostelName(cursor.getString(cursor.getColumnIndex(Hostel.KEY_NAME)));
-            hostel.setDescription(cursor.getString(cursor.getColumnIndex(Hostel.KEY_DESCRIPTION)));
-            hostel.setAddress(cursor.getString(cursor.getColumnIndex(Hostel.KEY_ADDRESS)));
-            hostel.setCity(cursor.getString(cursor.getColumnIndex(Hostel.KEY_CITY)));
-            hostel.setCountry(cursor.getString(cursor.getColumnIndex(Hostel.KEY_COUNTRY)));
-            hostel.setCapacity(cursor.getInt(cursor.getColumnIndex(Hostel.KEY_CAPACITY)));
         }
 
         cursor.close();
@@ -647,16 +665,14 @@ public void deleteRoom(Room room) {
         if (cursor.moveToFirst()) {
             do {
                 @SuppressLint("Range") Room room = new Room(
-                        cursor.getInt(cursor.getColumnIndex(Room.KEY_ID)),
                         cursor.getInt(cursor.getColumnIndex(Room.KEY_HOSTEL_ID)),
-                        cursor.getInt(cursor.getColumnIndex(Room.KEY_STUDENT_ID)),
+                        cursor.getInt(cursor.getColumnIndex(Room.KEY_HOSTEL_NAME)),
                         cursor.getString(cursor.getColumnIndex(Room.KEY_ROOM_TYPE)),
                         cursor.getString(cursor.getColumnIndex(Room.KEY_CAPACITY)),
                         cursor.getInt(cursor.getColumnIndex(Room.KEY_PRICE)),
                         cursor.getString(cursor.getColumnIndex(Room.KEY_DESCRIPTION)),
-                        cursor.getString(cursor.getColumnIndex(Room.KEY_STATUS)),
-                        cursor.getDouble(cursor.getColumnIndex(Room.KEY_PRICE_PER_NIGHT)),
-                        cursor.getString(cursor.getColumnIndex(Room.KEY_BOOKING_DATE))
+                        cursor.getString(cursor.getColumnIndex(Room.KEY_STATUS))
+
                 );
                 rooms.add(room);
             } while (cursor.moveToNext());
@@ -706,37 +722,5 @@ public void deleteRoom(Room room) {
         return count;
     }
 
-    public Room getRoom(long id) {
-        // get readable database as we are not inserting anything
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.query(Room.TABLE_NAME,
-                new String[]{Room.KEY_ID , Room.KEY_STUDENT_ID,Room.KEY_HOSTEL_ID, Room.KEY_ROOM_TYPE, Room.KEY_CAPACITY,Room.KEY_PRICE, Room.KEY_DESCRIPTION},
-                Hostel.KEY_ID + "=?",
-                new String[]{String.valueOf(id)}, null, null, null, null);
-
-        if (cursor != null)
-            cursor.moveToFirst();
-
-        // prepare note object
-        assert cursor != null;
-        @SuppressLint("Range") Room rooms = new Room(
-                cursor.getInt(cursor.getColumnIndex(Room.KEY_ID)),
-                cursor.getInt(cursor.getColumnIndex(Room.KEY_STUDENT_ID)),
-                cursor.getInt(cursor.getColumnIndex(Room.KEY_HOSTEL_ID)),
-                cursor.getString(cursor.getColumnIndex(Room.KEY_ROOM_TYPE)),
-                cursor.getString(cursor.getColumnIndex(Room.KEY_CAPACITY)),
-                cursor.getInt(cursor.getColumnIndex(Room.KEY_PRICE)),
-                cursor.getString(cursor.getColumnIndex(Room.KEY_DESCRIPTION)),
-                cursor.getString(cursor.getColumnIndex(Room.KEY_STATUS)),
-                cursor.getDouble(cursor.getColumnIndex(Room.KEY_PRICE_PER_NIGHT)),
-                cursor.getString(cursor.getColumnIndex(Room.KEY_BOOKING_DATE))
-            );
-
-        // close the db connection
-        cursor.close();
-
-        return rooms;
-    }
 
 }

@@ -44,4 +44,8 @@
         <item>Pod Dorm</item>
         <!-- Add more room types as needed -->
     </string-array>
+    <string-array name="status">
+        <item>Available</item>
+        <item>Unavailable</item>
+    </string-array>
 </resources>

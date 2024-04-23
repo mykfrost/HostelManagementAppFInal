@@ -4,39 +4,45 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:orientation="vertical">
+    <TextView
+        android:padding="10dp"
+        android:text="Hostel Name"
+        android:id="@+id/item_hostelNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <TextView
         android:padding="10dp"
-        android:text="Name"
-        android:id="@+id/studentNameTextView"
+        android:text="Student Name"
+        android:id="@+id/item_studentNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <TextView
         android:padding="10dp"
         android:text="Check In Date"
-        android:id="@+id/checkInDateTextView"
+        android:id="@+id/item_checkInDateTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <TextView
         android:padding="10dp"
         android:text="Check Out"
-        android:id="@+id/checkOutDateTextView"
+        android:id="@+id/item_checkOutDateTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <TextView
         android:padding="10dp"
         android:text="Room Type"
-        android:id="@+id/roomTypeTextView"
+        android:id="@+id/item_roomTypeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <TextView
         android:padding="10dp"
         android:text="Price"
-        android:id="@+id/totalPriceTextView"
+        android:id="@+id/item_totalPriceTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.hms.BookRoomActivity;
 import com.example.hms.R;
 import com.example.hms.utils.Hostel;
 import com.example.hms.views.HostelDetailsActivity;
@@ -44,14 +45,9 @@ public class RoomBookingAdapter extends RecyclerView.Adapter<RoomBookingAdapter.
         holder.hostelNameTextView.setText(hostel.getHostelName());
         holder.itemView.setOnClickListener(v -> {
             // Handle item click here
-            Intent intent = new Intent(context, HostelDetailsActivity.class);
+            Intent intent = new Intent(context, BookRoomActivity.class);
             intent.putExtra("hostel_id", hostel.getId());
             intent.putExtra("hostel_name", hostel.getHostelName());
-            intent.putExtra("description", hostel.getDescription());
-            intent.putExtra("address", hostel.getAddress());
-            intent.putExtra("city", hostel.getCity());
-            intent.putExtra("country", hostel.getCountry());
-            intent.putExtra("capacity", hostel.getCapacity());
             context.startActivity(intent);
 
         });

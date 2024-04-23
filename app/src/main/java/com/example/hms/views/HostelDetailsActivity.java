@@ -34,6 +34,7 @@ public class HostelDetailsActivity extends AppCompatActivity {
         // Get intent extras
         Intent intent = getIntent();
         if (intent != null) {
+            int hostel_id = intent.getIntExtra("hostel_id",-1);
             String hostelName = intent.getStringExtra("name");
             String description = intent.getStringExtra("description");
             String address = intent.getStringExtra("address");

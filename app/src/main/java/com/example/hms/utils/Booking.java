@@ -4,6 +4,8 @@ public class Booking {
     public static final String TABLE_NAME = "bookings";
     public static final String KEY_ID = "id";
     public static final String KEY_ROOM_ID = "room_id";
+    public  static  final String KEY_HOSTEL_NAME = "hostel_name";
+    public  static  final  String KEY_STUDENT_NAME = "student_name";
     public static final String KEY_HOSTEL_ID = "hostel_id"; // Added hostel_id
     public static final String KEY_STUDENT_ID = "student_id";
     public static final String KEY_CHECK_IN_DATE = "check_in_date";
@@ -14,6 +16,26 @@ public class Booking {
     private int id;
     private int roomId;
     private int hostelId; // Added hostelId
+
+    public String getHostel_name() {
+        return hostel_name;
+    }
+
+    public void setHostel_name(String hostel_name) {
+        this.hostel_name = hostel_name;
+    }
+
+    private  String hostel_name;
+
+    public String getStudenName() {
+        return studenName;
+    }
+
+    public void setStudenName(String studenName) {
+        this.studenName = studenName;
+    }
+
+    private String studenName;
     private int studentId;
     private String checkInDate;
     private String checkOutDate;
@@ -24,7 +46,9 @@ public class Booking {
             "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             KEY_ROOM_ID + " INTEGER," +
             KEY_HOSTEL_ID + " INTEGER," + // Added hostel_id to CREATE_TABLE
+            KEY_HOSTEL_NAME + " TEXT," +
             KEY_STUDENT_ID + " INTEGER," +
+            KEY_STUDENT_NAME + " TEXT," +
             KEY_ROOM_TYPE + " TEXT," + // Added roomType to CREATE_TABLE
             KEY_CHECK_IN_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP," +
             KEY_CHECK_OUT_DATE + " TEXT," +
@@ -36,11 +60,12 @@ public class Booking {
     public Booking() {
     }
 
-    public Booking(int id, int roomId, int hostelId, int studentId, String checkInDate, String checkOutDate, double totalPrice, String roomType) {
+    public Booking(int id, int roomId, int hostelId, int studentId,String studentName, String checkInDate, String checkOutDate, double totalPrice, String roomType) {
         this.id = id;
         this.roomId = roomId;
         this.hostelId = hostelId;
         this.studentId = studentId;
+        this.studenName = studentName;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
         this.totalPrice = totalPrice;

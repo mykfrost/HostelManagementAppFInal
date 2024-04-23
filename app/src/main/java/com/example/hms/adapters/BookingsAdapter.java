@@ -46,29 +46,35 @@ public class BookingsAdapter extends RecyclerView.Adapter<BookingsAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView studentNameTextView;
-        private TextView checkInDateTextView;
-        private TextView checkOutDateTextView;
-        private TextView roomTypeTextView;
-        private TextView totalPriceTextView;
-
+//        private TextView studentNameTextView;
+//        private TextView checkInDateTextView;
+//        private TextView checkOutDateTextView;
+//        private TextView roomTypeTextView;
+//        private TextView totalPriceTextView;
+        TextView hostelName, student_name , checkin , checkout , roomtType, price;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            studentNameTextView = itemView.findViewById(R.id.studentNameTextView);
-            checkInDateTextView = itemView.findViewById(R.id.checkInDateTextView);
-            checkOutDateTextView = itemView.findViewById(R.id.checkOutDateTextView);
-            roomTypeTextView = itemView.findViewById(R.id.roomTypeTextView);
-            totalPriceTextView = itemView.findViewById(R.id.totalPriceTextView);
-
+//            studentNameTextView = itemView.findViewById(R.id.studentNameTextView);
+//            checkInDateTextView = itemView.findViewById(R.id.checkInDateTextView);
+//            checkOutDateTextView = itemView.findViewById(R.id.checkOutDateTextView);
+//            roomTypeTextView = itemView.findViewById(R.id.roomTypeTextView);
+//            totalPriceTextView = itemView.findViewById(R.id.totalPriceTextView);
+            hostelName = itemView.findViewById(R.id.item_hostel_name);
+            student_name = itemView.findViewById(R.id.item_studentNameTextView);
+            checkin = itemView.findViewById(R.id.item_checkInDateTextView);
+            checkout = itemView.findViewById(R.id.item_checkOutDateTextView);
+            roomtType = itemView.findViewById(R.id.item_roomTypeTextView);
+            price = itemView.findViewById(R.id.item_totalPriceTextView);
             itemView.setOnClickListener(this);
         }
 
         public void bind(Booking booking) {
-            studentNameTextView.setText(booking.getStudentId());
-            checkInDateTextView.setText("Check-In Date: " + booking.getCheckInDate());
-            checkOutDateTextView.setText("Check-Out Date: " + booking.getCheckOutDate());
-            roomTypeTextView.setText("Room Type: " + booking.getRoomType());
-            totalPriceTextView.setText("Total Price: $" + booking.getTotalPrice());
+
+            student_name.setText(booking.getStudentId());
+            checkin .setText("Check-In Date: " + booking.getCheckInDate());
+            checkout.setText("Check-Out Date: " + booking.getCheckOutDate());
+            roomtType.setText("Room Type: " + booking.getRoomType());
+            price.setText("Total Price: $" + booking.getTotalPrice());
         }
 
         @Override

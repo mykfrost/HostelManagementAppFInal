@@ -14,9 +14,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.example.hms.utils.User;
 import com.example.hms.views.AddHostelActivity;
+import com.example.hms.views.AvailableRooms;
 import com.example.hms.views.BookingDetailsActivity;
 import com.example.hms.views.CreateNotification;
 import com.example.hms.views.HostelsActivity;
+import com.example.hms.views.NewBookRoomActivity;
 import com.example.hms.views.StudentManager;
 import com.example.hms.views.SelectHostelActivity;
 import androidx.work.ExistingPeriodicWorkPolicy;
@@ -54,10 +56,12 @@ public class MainActivity extends AppCompatActivity {
 
         // Get the intent that started this activity
         Intent intent = getIntent();
-
         // Check if intent has extras
         if (intent != null && intent.getExtras() != null) {
             // Retrieve the extras
+           // int userId = response.getInt("user_id");
+            int userId;
+            userId = intent.getIntExtra("user_id", -1);
             String fullName = intent.getStringExtra("full_names");
             String role = intent.getStringExtra("role");
 
@@ -72,11 +76,14 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "Intent or extras not found.");
         }
         if (sessionManager.isLoggedIn()) {
-            User user = new User();
+
             String fullName = sessionManager.getFullName();
             String userRole = sessionManager.isAdmin() ? "admin" : "user";
             tvFullName.setText(fullName);
             tvRole.setText(userRole);
+
+
+
             // Schedule the database upload work
             //scheduleDatabaseUploadWork();
             // Show user role
@@ -84,10 +91,12 @@ public class MainActivity extends AppCompatActivity {
                 btnAddHostels.setVisibility(View.VISIBLE);
                 btnAddRoom.setVisibility(View.VISIBLE);
                 btnViewBooking.setVisibility(View.VISIBLE);
+                btnRoomAvailability.setVisibility(View.VISIBLE);
             } else {
                 btnAddHostels.setVisibility(View.GONE);
                 btnViewBooking.setVisibility(View.GONE);
                 btnAddRoom.setVisibility(View.GONE);
+                btnRoomAvailability.setVisibility(View.VISIBLE);
             }
 
         } else {
@@ -103,7 +112,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(booking);
             }
         });
-
+     btnRoomAvailability.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        Intent next = new Intent(getApplicationContext(), NewBookRoomActivity.class);
+        startActivity(next);
+       }
+    });
         btnFeedbackManagement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -16,6 +16,7 @@ public class Room {
     public static final String KEY_ID = "id";
     public static final String KEY_HOSTEL_ID = "hostel_id";
     public static final String KEY_STUDENT_ID = "student_id";
+    public static final String  KEY_HOSTEL_NAME = "hostel_name";
     public static final String KEY_ROOM_TYPE = "room_type";
     public static final String KEY_CAPACITY = "capacity";
     public static final String KEY_PRICE = "price";
@@ -26,17 +27,26 @@ public class Room {
 
 
 
-    public Room(int id, int hostel_id, int student_id, String room_type, String capacity, int price, String description, String status, double price_per_night, String booking_date) {
+    public Room(int id, int hostel_id,String hostel_name,  String room_type, String capacity, int price, String description, String status,  String booking_date) {
         this.id = id;
         this.hostel_id = hostel_id;
-        this.student_id = student_id;
+        this.hostel_name = hostel_name;
         this.room_type = room_type;
         this.capacity = capacity;
         this.price = price;
         this.description = description;
         this.status = status;
-        this.price_per_night = price_per_night;
         this.booking_date = booking_date;
+    }
+
+    public Room(int id, int hostel_id,  String room_type, String capacity, int price, String description, String status) {
+        this.id = id;
+        this.hostel_id = hostel_id;
+        this.room_type = room_type;
+        this.capacity = capacity;
+        this.price = price;
+        this.description = description;
+        this.status = status;
     }
 
     public Room() {
@@ -46,25 +56,32 @@ public class Room {
             "(" +
             KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             KEY_HOSTEL_ID + " INTEGER," +
-            KEY_STUDENT_ID + " INTEGER," +
             KEY_ROOM_TYPE + " TEXT," +
+            KEY_HOSTEL_NAME + " TEXT," +
             KEY_CAPACITY + " TEXT," +
             KEY_PRICE + " INTEGER," +
             KEY_DESCRIPTION + " TEXT," +
             KEY_STATUS + " TEXT DEFAULT 'available'," +
-            KEY_PRICE_PER_NIGHT + " DECIMAL(10,2) NOT NULL," +
             KEY_BOOKING_DATE + " DATE" +
             ")";
 
     public int id;
     public int hostel_id;
-    public int student_id;
+
+    public String getHostel_name() {
+        return hostel_name;
+    }
+
+    public void setHostel_name(String hostel_name) {
+        this.hostel_name = hostel_name;
+    }
+
+    public  String hostel_name;
     public String room_type;
     public String capacity;
     public int price;
     public String description;
     public String status;
-    public double price_per_night;
     public String booking_date;
 
     public int getId() {
@@ -83,13 +100,8 @@ public class Room {
         this.hostel_id = hostel_id;
     }
 
-    public int getStudent_id() {
-        return student_id;
-    }
 
-    public void setStudent_id(int student_id) {
-        this.student_id = student_id;
-    }
+
 
     public String getRoom_type() {
         return room_type;
@@ -131,13 +143,9 @@ public class Room {
         this.status = status;
     }
 
-    public double getPrice_per_night() {
-        return price_per_night;
-    }
 
-    public void setPrice_per_night(double price_per_night) {
-        this.price_per_night = price_per_night;
-    }
+
+
 
     public String getBooking_date() {
         return booking_date;
@@ -146,10 +154,5 @@ public class Room {
     public void setBooking_date(String booking_date) {
         this.booking_date = booking_date;
     }
-
-//    public int getNumberOfRoomsInHostel(int hostel_id) {
-//        return databaseHandler.getHostelRoomsCount(hostel_id);
-//    }
-
 
 }

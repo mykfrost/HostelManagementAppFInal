@@ -124,6 +124,7 @@ public class LoginActivity extends AppCompatActivity {
             String fullName = response.getString("full_name");
             String userRole = response.getString("user_role");
 
+
             // Create User object with fetched data
             User user = new User(fullName, userRole);
 

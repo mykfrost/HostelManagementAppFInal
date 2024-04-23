@@ -16,16 +16,17 @@ public class Notification {
     private String message;
     private String sentAt;
 
-    public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME +
-            "(" + KEY_ID + " INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY," +
-            KEY_HOSTEL_ID + " INT(11) UNSIGNED," +
-            KEY_SENDER_ID + " INT(11) UNSIGNED," +
-            KEY_RECEIVER_ID + " INT(11) UNSIGNED," +
-            KEY_MESSAGE + " TEXT," +
-            KEY_SENT_AT + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
-            "FOREIGN KEY(" + KEY_HOSTEL_ID + ") REFERENCES hostel(id)," +
-            "FOREIGN KEY(" + KEY_SENDER_ID + ") REFERENCES user(id)," +
-            "FOREIGN KEY(" + KEY_RECEIVER_ID + ") REFERENCES student(id))";
+    public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + Notification.TABLE_NAME +
+            "(" + Notification.KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            Notification.KEY_HOSTEL_ID + " INTEGER," +
+            Notification.KEY_SENDER_ID + " INTEGER," +
+            Notification.KEY_RECEIVER_ID + " INTEGER," +
+            Notification.KEY_MESSAGE + " TEXT," +
+            Notification.KEY_SENT_AT + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+            "FOREIGN KEY(" + Notification.KEY_HOSTEL_ID + ") REFERENCES hostel(id)," +
+            "FOREIGN KEY(" + Notification.KEY_SENDER_ID + ") REFERENCES user(id)," +
+            "FOREIGN KEY(" + Notification.KEY_RECEIVER_ID + ") REFERENCES student(id))";
+
 
     public Notification() {
     }
@@ -33,6 +34,13 @@ public class Notification {
     public Notification(int id, int hostelId, int senderId, int receiverId, String message, String sentAt) {
         this.id = id;
         this.hostelId = hostelId;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
+        this.message = message;
+        this.sentAt = sentAt;
+    }
+    public Notification(int id, int senderId, int receiverId, String message, String sentAt) {
+        this.id = id;
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.message = message;
