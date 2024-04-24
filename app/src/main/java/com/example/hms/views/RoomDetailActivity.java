@@ -32,6 +32,7 @@ public class RoomDetailActivity extends AppCompatActivity {
     private SimpleDateFormat dateFormatter;
    DatabaseHandler dbhandler;
    SessionManager sessionManager ;
+
    int hostelid ,studentid, roomId;
    EditText checkout;
 
@@ -46,7 +47,7 @@ public class RoomDetailActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        dbhandler = new DatabaseHandler(this , sessionManager);
         Intent intent = getIntent();
         if (intent != null) {
             // Retrieve the extras from the Intent using the keys
@@ -68,14 +69,17 @@ public class RoomDetailActivity extends AppCompatActivity {
             textviewdescription = findViewById(R.id.description);
             checkout = findViewById(R.id.checkOut_date);
             book = findViewById(R.id.newButtonBook);
-
+            // Initialize the dateFormatter
+            dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
             roomHostelName.setText("Room ID: " + hostelName);
             textviewdescription.setText("Desc: "+ description);
             roomTypeTextView.setText("Room Type: " + roomType);
             statusTextView.setText("Status: " + status);
             capacityTextView.setText("Capacity: " + capacity);
-            totalPriceTextView.setText("Total Price: Ksh" + totalPrice);
+          // totalPriceTextView.setText((int) totalPrice);
+            totalPriceTextView.setText(String.valueOf((int) totalPrice));
+
         } else {
             // Handle the case where intent is null
             Toast.makeText(this, "Intent is null", Toast.LENGTH_SHORT).show();
@@ -150,7 +154,10 @@ public class RoomDetailActivity extends AppCompatActivity {
         String studentname = fetchStudenName();
         String desc = textviewdescription.getText().toString().trim();
         String capacity = capacityTextView.getText().toString().trim();
-        String price = totalPriceTextView.toString().trim();
+        String price = totalPriceTextView.getText().toString().trim();
+
+        // Extract the numeric part from the string
+        String numericPart = price.replaceAll("[^0-9.]", "");
 
         double parsedPrice = Double.parseDouble(price);
 

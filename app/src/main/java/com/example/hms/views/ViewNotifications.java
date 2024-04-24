@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hms.R;
+import com.example.hms.SessionManager;
 import com.example.hms.adapters.NotificationAdapter;
 import com.example.hms.database.DatabaseHandler;
 import com.example.hms.utils.Notification;
@@ -21,9 +22,10 @@ import java.util.List;
 
 public class ViewNotifications extends AppCompatActivity {
     private RecyclerView recyclerViewNotifications;
-    private  DatabaseHandler dbHandler;
+    private DatabaseHandler dbHandler;
     private NotificationAdapter notificationsAdapter;
     private List<Notification> notificationList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,23 +43,24 @@ public class ViewNotifications extends AppCompatActivity {
         recyclerViewNotifications.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewNotifications.setAdapter(notificationsAdapter);
 
+        // Initialize DatabaseHandler
+        dbHandler = new DatabaseHandler(this , new SessionManager(this));
+
         // Populate notificationList with data from the database (retrieve notifications)
-
-        // For demonstration, let's assume notificationList is populated with sample data
         getAllNotifications();
-
-        // Update RecyclerView
-        notificationsAdapter.notifyDataSetChanged();
     }
 
     private void getAllNotifications() {
+        // Retrieve notifications from the database
         List<Notification> notifications = dbHandler.getAllNotifications();
 
         if (notifications != null && !notifications.isEmpty()) {
+            // Add retrieved notifications to notificationList
             notificationList.addAll(notifications);
+            // Notify adapter about data changes
             notificationsAdapter.notifyDataSetChanged();
         } else {
-            // No notifications found
+            // No notifications found, show a toast message
             Toast.makeText(this, "No notifications found", Toast.LENGTH_SHORT).show();
         }
     }

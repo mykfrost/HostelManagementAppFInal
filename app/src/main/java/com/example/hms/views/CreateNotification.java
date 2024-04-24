@@ -56,6 +56,9 @@ public class CreateNotification extends AppCompatActivity {
         if (sessionManager.isLoggedIn()) {
             senderId = sessionManager.getUserID(); // Fetch sender ID
             textViewSenderId.setText("Sender ID: " + senderId); // Display sender ID
+            if(sessionManager.isAdmin()){
+                butonViewFeedback.setVisibility(View.VISIBLE);
+            }
         }
 
         // Button click listener to send feedback

@@ -60,7 +60,7 @@ public class ViewBookingsActivity extends AppCompatActivity {
         // Fetch data from the database and populate the hostelList
         bookingList.addAll(databaseHelper.getAllBookings());
 
-        adapter = new BookingsAdapter(bookingList , this);
+        adapter = new BookingsAdapter(  bookingList ,this);
 
         // Set RecyclerView layout manager and adapter
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

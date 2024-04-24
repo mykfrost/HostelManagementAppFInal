@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 btnAddHostels.setVisibility(View.GONE);
                 btnViewBooking.setVisibility(View.GONE);
-                btnAddRoom.setVisibility(View.GONE);
+                btnAddRoom.setVisibility(View.VISIBLE);
                 btnRoomAvailability.setVisibility(View.VISIBLE);
             }
 
